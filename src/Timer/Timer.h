@@ -10,8 +10,8 @@ class Timer
 {
 private:
     Timer();
-    unsigned int m_LastTime;
-    unsigned int m_DeltaTime;
+    float m_LastTime;
+    float m_DeltaTime;
 
     static Timer *s_Instance;
 

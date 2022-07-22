@@ -41,11 +41,24 @@ void Engine::Init(const char *p_Title, int p_Width, int p_Height)
 
 void Engine::Loop()
 {
+    const int frameDelay = 1000 / TARGET_FPS;
+
+    Uint32 frameStart;
+    Uint32 frameTime;
     while (s_Running)
     {
+        frameStart = SDL_GetTicks();
         HandleEvents();
         Update();
         Render();
+
+        Timer::GetInstance()->Tick();
+
+        frameTime = SDL_GetTicks() - frameStart;
+        if (frameTime < frameDelay)
+        {
+            SDL_Delay(frameDelay - frameTime);
+        }
     }
 }
 

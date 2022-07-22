@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include "SDL2/SDL.h"
 #include "../Input/Input.h"
-
+#include "../Timer/Timer.h"
 class Engine
 {
 private:
