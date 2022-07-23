@@ -32,7 +32,7 @@ public:
         m_Transform = new Transform(p_Props->m_Position.m_X, p_Props->m_Position.m_Y);
     }
     virtual void Render() = 0;
-    virtual void Update() = 0;
+    virtual void Update(float p_DeltaTime) = 0;
     virtual void Clean() = 0;
 
     friend std::ostream &operator<<(std::ostream &p_Out, const GameObject &p_GameObject)

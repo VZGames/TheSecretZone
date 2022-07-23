@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include "SDL2/SDL.h"
+#include "../Renderer/Renderer.h"
 #include "../Input/Input.h"
 #include "../Timer/Timer.h"
 class Engine
@@ -22,7 +23,6 @@ public:
     void Loop();
     void Clean();
     void Quit();
-
     static bool s_Running;
     static SDL_Renderer *s_Renderer;
     static Engine *GetInstance() { return s_Instance = (s_Instance == nullptr) ? new Engine() : s_Instance; }

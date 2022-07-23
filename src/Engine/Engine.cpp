@@ -1,8 +1,11 @@
 #include "Engine.h"
+#include "../Objects/Player/Player.h"
 
 SDL_Renderer *Engine::s_Renderer = nullptr;
 Engine *Engine::s_Instance = nullptr;
 bool Engine::s_Running = false;
+Player *player = nullptr;
+
 Engine::Engine()
     : m_Window(nullptr)
 {
@@ -33,9 +36,11 @@ void Engine::Init(const char *p_Title, int p_Width, int p_Height)
     if (s_Renderer)
     {
         // Select the color for drawing.
-        SDL_SetRenderDrawColor(s_Renderer, 255, 255, 255, 255);
+        SDL_SetRenderDrawColor(s_Renderer, 0, 0, 0, 255);
     }
 
+    Renderer::GetInstance()->LoadTexture("Player1", "assets/sprites/Characters/BunnyCharacterSpriteSheet.png");
+    player = new Player(new Properties("Player1", Vector2I(100, 200), 48, 48));
     s_Running = true;
 }
 
@@ -65,28 +70,31 @@ void Engine::Loop()
 void Engine::Clean()
 {
     SDL_DestroyRenderer(s_Renderer);
+    Renderer::GetInstance()->Clean();
     // Close and destroy the window
     SDL_DestroyWindow(m_Window);
+}
+
+void Engine::Render()
+{
+    SDL_RenderClear(s_Renderer);
+    player->Render();
+    SDL_RenderPresent(s_Renderer);
+}
+
+void Engine::Update()
+{
+    float dt = Timer::GetInstance()->GetDeltaTime();
+    player->Update(dt);
+}
+
+void Engine::HandleEvents()
+{
+    Input::GetInstance()->Listen();
 }
 
 void Engine::Quit()
 {
     // Clean up
     SDL_Quit();
-}
-
-void Engine::Render()
-{
-    SDL_RenderClear(s_Renderer);
-    /* code here */
-    SDL_RenderPresent(s_Renderer);
-}
-
-void Engine::Update()
-{
-}
-
-void Engine::HandleEvents()
-{
-    Input::GetInstance()->Listen();
 }

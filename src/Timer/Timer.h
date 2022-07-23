@@ -18,6 +18,7 @@ private:
 public:
     void Tick();
     static Timer *GetInstance() { return s_Instance = (s_Instance == nullptr) ? new Timer() : s_Instance; }
+    float GetDeltaTime();
 };
 
 #endif // __TIMER_H__

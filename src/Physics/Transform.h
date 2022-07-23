@@ -11,8 +11,8 @@
 class Transform
 {
 public:
-    Vector2F m_Position;
-    Vector2F m_Velocity;
+    Vector2I m_Position;
+    Vector2I m_Velocity;
     Transform()
     {
         m_Position.Zeros();
@@ -30,7 +30,7 @@ public:
 
     inline void TranslateX(float x) { m_Position.m_X += x; }
     inline void TranslateY(float y) { m_Position.m_Y += y; }
-    inline void TranslateVector(Vector2F p_Vec)
+    inline void TranslateVector(Vector2I p_Vec)
     {
         m_Position += p_Vec;
     }
