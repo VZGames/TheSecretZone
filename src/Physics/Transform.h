@@ -17,22 +17,22 @@ public:
     {
         m_Position.Zeros();
     }
-    Transform(float p_posX, float p_posY)
+    Transform(float p_PosX, float p_PosY)
     {
-        m_Position.m_X = p_posX;
-        m_Position.m_Y = p_posY;
+        m_Position.m_X = p_PosX;
+        m_Position.m_Y = p_PosY;
     }
 
-    void Log(char *msg)
+    void Log(char *p_Msg)
     {
-        std::cout << msg << "(X, Y) = (" << m_Position.m_X << "," << m_Position.m_Y << ")" << std::endl;
+        std::cout << p_Msg << "(X, Y) = (" << m_Position.m_X << "," << m_Position.m_Y << ")" << std::endl;
     }
 
     inline void TranslateX(float x) { m_Position.m_X += x; }
     inline void TranslateY(float y) { m_Position.m_Y += y; }
-    inline void TranslateVector(Vector2F v)
+    inline void TranslateVector(Vector2F p_Vec)
     {
-        m_Position += v;
+        m_Position += p_Vec;
     }
 };
 #endif // __TRANSFORM_H__
