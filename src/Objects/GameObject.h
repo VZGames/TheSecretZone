@@ -35,9 +35,9 @@ public:
     virtual void Update() = 0;
     virtual void Clean() = 0;
 
-    friend std::ostream &operator<<(std::ostream p_Out, GameObject &p_GameObject)
+    friend std::ostream &operator<<(std::ostream &p_Out, const GameObject &p_GameObject)
     {
-        p_Out << "";
+        p_Out << "\n";
         return p_Out;
     }
 };

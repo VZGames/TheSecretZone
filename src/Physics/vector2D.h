@@ -103,7 +103,7 @@ public:
     {
         std::cout << m_X << ", " << m_Y << std::endl;
     }
-    friend std::ostream &operator<<(std::ostream p_Out, const Vector2D &p_Vec)
+    friend std::ostream &operator<<(std::ostream &p_Out, const Vector2D &p_Vec)
     {
         p_Out << "(" << p_Vec.m_X << ", " << p_Vec.m_Y << ")\n";
         return p_Out;
