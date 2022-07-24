@@ -69,10 +69,10 @@ void Engine::Loop()
 
 void Engine::Clean()
 {
-    SDL_DestroyRenderer(s_Renderer);
     Renderer::GetInstance()->Clean();
-    // Close and destroy the window
+    // Close and destroy the window and the renderer
     SDL_DestroyWindow(m_Window);
+    SDL_DestroyRenderer(s_Renderer);
 }
 
 void Engine::Render()
