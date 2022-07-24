@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 message("Root: ${CMAKE_SOURCE_DIR}")
 
 if(WIN32)
+    set(3RDPARTY_DIR "${CMAKE_SOURCE_DIR}/thirdparty")
     set(INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
     set(LIBRARY_DIR "${CMAKE_SOURCE_DIR}/libs")
 
@@ -43,11 +44,11 @@ else()
 endif()
 
 # include SDL header files
-include_directories(${INCLUDE_DIR})
+include_directories(${INCLUDE_DIR} ${3RDPARTY_DIR})
 link_directories(${LIBRARY_DIR})
 
 # load user source and header files
-file(GLOB_RECURSE SOURCE_FILES "src/*.h" "src/*.cpp")
+file(GLOB_RECURSE SOURCE_FILES "src/*.h" "src/*.cpp" "thirdparty/*.h" "thirdparty/*.cpp")
 
 add_executable(${PROJECT_NAME} WIN32 ${SOURCE_FILES})
 
