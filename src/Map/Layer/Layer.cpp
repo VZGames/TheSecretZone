@@ -3,3 +3,15 @@
 Layer::Layer()
 {
 }
+
+Layer::Layer()
+{
+}
+
+void Layer::Render()
+{
+}
+
+void Layer::Update()
+{
+}
