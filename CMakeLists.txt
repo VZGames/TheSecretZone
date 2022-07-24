@@ -1,6 +1,6 @@
 set(CMAKE_VERBOSE_MAKEFILE ON)
 cmake_minimum_required(VERSION 3.2.0)
-project(Mun VERSION 0.1.0 DESCRIPTION "Mun By Be Studio" LANGUAGES CXX)
+project(TheSecretZone VERSION 0.1.0 DESCRIPTION "TheSecretZone By Be Studio" LANGUAGES CXX)
 
 # specify the C++ standard
 set(CMAKE_CXX_STANDARD 11)
