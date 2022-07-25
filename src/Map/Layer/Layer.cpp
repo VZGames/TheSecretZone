@@ -4,10 +4,6 @@ Layer::Layer()
 {
 }
 
-Layer::Layer()
-{
-}
-
 void Layer::Render()
 {
 }
