@@ -55,5 +55,6 @@
 		"sstream": "cpp",
 		"cstring": "cpp",
 		"ctime": "cpp"
-	}
+	},
+	"cSpell.words": ["tinyxml"]
 }
