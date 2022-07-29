@@ -25,12 +25,12 @@
 //
 // Author: Tamir Atias
 //-----------------------------------------------------------------------------
-#include <tinyxml2.h>
-#include <cstdlib> 
+#include "../../thirdparty/TinyXML2/tinyxml2.h"
+#include <cstdlib>
 
-#include "TmxPolyline.h"
+#include "TmxParser/TmxPolyline.h"
 
-namespace Tmx 
+namespace Tmx
 {
     Polyline::Polyline()
         : points()
@@ -40,7 +40,7 @@ namespace Tmx
     void Polyline::Parse(const tinyxml2::XMLNode *polylineNode)
     {
         char *pointsLine = strdup(polylineNode->ToElement()->Attribute("points"));
-        
+
         char *token = strtok(pointsLine, " ");
         while (token)
         {

@@ -21,18 +21,19 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
-#include <tinyxml2.h>
+#include "../../thirdparty/TinyXML2/tinyxml2.h"
 #include <cstdlib>
 #include <cassert> //RJCB
 #include <cstring>
 
-#include "TmxLayer.h"
-#include "TmxGroupLayer.h"
-#include "TmxTileLayer.h"
-#include "TmxObjectGroup.h"
-#include "TmxImageLayer.h"
+#include "TmxParser/TmxLayer.h"
+#include "TmxParser/TmxGroupLayer.h"
+#include "TmxParser/TmxTileLayer.h"
+#include "TmxParser/TmxObjectGroup.h"
+#include "TmxParser/TmxImageLayer.h"
 
-namespace Tmx {
+namespace Tmx
+{
 
     GroupLayer::GroupLayer(const Tmx::Map *_map)
         : Layer(_map, std::string(), 0, 0, 0, 0, 1.0f, true, TMX_LAYERTYPE_GROUP_LAYER)
@@ -41,8 +42,8 @@ namespace Tmx {
 
     GroupLayer::~GroupLayer()
     {
-      for(auto c : children)
-        delete c;
+        for (auto c : children)
+            delete c;
     }
 
     void GroupLayer::Parse(const tinyxml2::XMLNode *groupLayerNode)
@@ -63,25 +64,30 @@ namespace Tmx {
 
         // Parse the group.
         const tinyxml2::XMLNode *child = groupLayerElem->FirstChild();
-        assert(child); //RJCB
+        assert(child); // RJCB
 
-        while(child != nullptr) {
-            if(strncmp(child->Value(), "group", 5) == 0) {
+        while (child != nullptr)
+        {
+            if (strncmp(child->Value(), "group", 5) == 0)
+            {
                 auto groupLayer = new GroupLayer(map);
                 groupLayer->Parse(child);
                 AddChild(groupLayer);
             }
-            else if(strncmp(child->Value(), "layer", 5) == 0) {
+            else if (strncmp(child->Value(), "layer", 5) == 0)
+            {
                 auto tileLayer = new TileLayer(map);
                 tileLayer->Parse(child);
                 AddChild(tileLayer);
             }
-            else if(strncmp(child->Value(), "objectgroup", 11) == 0) {
+            else if (strncmp(child->Value(), "objectgroup", 11) == 0)
+            {
                 auto objectGroup = new ObjectGroup(map);
                 objectGroup->Parse(child);
                 AddChild(objectGroup);
             }
-            else if(strncmp(child->Value(), "imagelayer", 10) == 0) {
+            else if (strncmp(child->Value(), "imagelayer", 10) == 0)
+            {
                 auto imageLayer = new ImageLayer(map);
                 imageLayer->Parse(child);
                 AddChild(imageLayer);
@@ -98,21 +104,23 @@ namespace Tmx {
         }
     }
 
-    void GroupLayer::AddChild(Tmx::Layer* childLayer)
+    void GroupLayer::AddChild(Tmx::Layer *childLayer)
     {
         children.push_back(childLayer);
     }
 
-    Tmx::Layer* GroupLayer::GetChild(const int index) const {
-      return children.at(index);
+    Tmx::Layer *GroupLayer::GetChild(const int index) const
+    {
+        return children.at(index);
     }
 
-    const std::vector<Tmx::Layer*> GroupLayer::GetChildren() const noexcept
+    const std::vector<Tmx::Layer *> GroupLayer::GetChildren() const noexcept
     {
         return children;
     }
 
-    int GroupLayer::GetNumChildren() const noexcept {
+    int GroupLayer::GetNumChildren() const noexcept
+    {
         return children.size();
     }
 

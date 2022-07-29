@@ -25,9 +25,9 @@
 //
 // Author: Tamir Atias
 //-----------------------------------------------------------------------------
-#include <tinyxml2.h>
+#include "../../thirdparty/TinyXML2/tinyxml2.h"
 
-#include "TmxProperty.h"
+#include "TmxParser/TmxProperty.h"
 
 namespace Tmx
 {
@@ -38,11 +38,11 @@ namespace Tmx
 
     void Property::Parse(const tinyxml2::XMLElement *propertyElem)
     {
-        const tinyxml2::XMLAttribute* typeAttribute = propertyElem->FindAttribute("type");
+        const tinyxml2::XMLAttribute *typeAttribute = propertyElem->FindAttribute("type");
 
         if (typeAttribute != nullptr)
         {
-            const char* typeAsCString = typeAttribute->Value();
+            const char *typeAsCString = typeAttribute->Value();
 
             if (strcmp(typeAsCString, "string") == 0)
             {
@@ -78,7 +78,7 @@ namespace Tmx
             type = TMX_PROPERTY_STRING;
         }
 
-        const char* valueAsCString = propertyElem->Attribute("value");
+        const char *valueAsCString = propertyElem->Attribute("value");
         if (valueAsCString)
         {
             value = valueAsCString;
@@ -87,7 +87,7 @@ namespace Tmx
         {
             // The value of properties that contain newlines is stored in the element text.
             valueAsCString = propertyElem->GetText();
-            value = valueAsCString ? valueAsCString : std::string(); 
+            value = valueAsCString ? valueAsCString : std::string();
         }
     }
 }

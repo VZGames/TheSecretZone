@@ -1,3 +1,7 @@
+configure_file(
+  "${CMAKE_SOURCE_DIR}/include/TmxParser/Tmx.h.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/include/TmxParser/Tmx.h")
+
 if(WIN32)
     set(INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
     set(LIBRARY_DIR "${CMAKE_SOURCE_DIR}/libs")

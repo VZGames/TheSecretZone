@@ -25,25 +25,26 @@
 //
 // Author: Tamir Atias
 //-----------------------------------------------------------------------------
-#include <tinyxml2.h>
+#include "../../thirdparty/TinyXML2/tinyxml2.h"
 #include <cstdlib>
 
-#include "TmxTerrainArray.h"
-#include "TmxTerrain.h"
+#include "TmxParser/TmxTerrainArray.h"
+#include "TmxParser/TmxTerrain.h"
 
-using std::string;
 using std::map;
+using std::string;
 
 namespace Tmx
 {
     TerrainArray::TerrainArray()
-    {}
+    {
+    }
 
     TerrainArray::~TerrainArray()
     {
     }
 
-    void TerrainArray::Parse(std::vector< Tmx::Terrain* > *terrainTypes, const tinyxml2::XMLNode *terrainArrayNode)
+    void TerrainArray::Parse(std::vector<Tmx::Terrain *> *terrainTypes, const tinyxml2::XMLNode *terrainArrayNode)
     {
         // Iterate through all of the terrain nodes.
         const tinyxml2::XMLNode *terrainNode = terrainArrayNode->FirstChildElement("terrain");

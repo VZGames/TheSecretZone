@@ -25,7 +25,7 @@
 //
 // Author: Guillaume Bertholon
 //-----------------------------------------------------------------------------
-#include "TmxColor.h"
+#include "TmxParser/TmxColor.h"
 #include <cstdio>
 #include <cstdlib>
 
@@ -54,13 +54,14 @@ namespace Tmx
         color |= b;
     }
 
-    Color::Color(const std::string& str)
+    Color::Color(const std::string &str)
     {
         // We skip the first # character and then read directly the hexadecimal value
         color = std::strtol((str.c_str() + 1), nullptr, 16);
 
         // If the input has the short format #RRGGBB without alpha channel we set it to 255
-        if(str.length() == 7) color |= 0xff000000;
+        if (str.length() == 7)
+            color |= 0xff000000;
     }
 
     Color::~Color()

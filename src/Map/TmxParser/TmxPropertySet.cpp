@@ -25,19 +25,20 @@
 //
 // Author: Tamir Atias
 //-----------------------------------------------------------------------------
-#include <tinyxml2.h>
+#include "../../thirdparty/TinyXML2/tinyxml2.h"
 #include <cstdlib>
 
-#include "TmxPropertySet.h"
+#include "TmxParser/TmxPropertySet.h"
 
-using std::string;
 using std::map;
+using std::string;
 
 namespace Tmx
 {
 
     PropertySet::PropertySet() : properties()
-    {}
+    {
+    }
 
     PropertySet::~PropertySet()
     {
@@ -51,7 +52,7 @@ namespace Tmx
 
         while (propertyNode)
         {
-            const tinyxml2::XMLElement* propertyElem = propertyNode->ToElement();
+            const tinyxml2::XMLElement *propertyElem = propertyNode->ToElement();
 
             auto nameAttrib = propertyElem->FindAttribute("name");
 
@@ -66,14 +67,14 @@ namespace Tmx
             property.Parse(propertyElem);
             properties[nameAttrib->Value()] = property;
 
-            //propertyNode = propertiesNode->IterateChildren("property", propertyNode); FIXME MAYBE
+            // propertyNode = propertiesNode->IterateChildren("property", propertyNode); FIXME MAYBE
             propertyNode = propertyNode->NextSiblingElement("property");
         }
     }
-		
+
     string PropertySet::GetStringProperty(const string &name, string defaultValue) const
     {
-        std::unordered_map< string, Property >::const_iterator iter = properties.find(name);
+        std::unordered_map<string, Property>::const_iterator iter = properties.find(name);
 
         if (iter == properties.end())
             return defaultValue;
@@ -127,15 +128,16 @@ namespace Tmx
         return iter->second.GetColorValue(defaultValue);
     }
 
-    bool PropertySet::HasProperty( const string& name ) const
+    bool PropertySet::HasProperty(const string &name) const
     {
-        if( properties.empty() ) return false;
-        return ( properties.find(name) != properties.end() );
+        if (properties.empty())
+            return false;
+        return (properties.find(name) != properties.end());
     }
 
-    std::map< std::string, std::string > PropertySet::GetList() const
+    std::map<std::string, std::string> PropertySet::GetList() const
     {
-        std::map< std::string, std::string > orderedProperties;
+        std::map<std::string, std::string> orderedProperties;
         for (auto &pair : properties)
         {
             auto &property = pair.second;

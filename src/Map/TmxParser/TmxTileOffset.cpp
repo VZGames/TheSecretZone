@@ -25,24 +25,25 @@
 //
 // Author: Tamir Atias
 //-----------------------------------------------------------------------------
-#include <tinyxml2.h>
+#include "../../thirdparty/TinyXML2/tinyxml2.h"
 
-#include "TmxTileOffset.h"
+#include "TmxParser/TmxTileOffset.h"
 
-namespace Tmx 
-{   
-    TileOffset::TileOffset() 
-        : x(0)
-        , y(0)
-    {}
-
-    TileOffset::~TileOffset() 
-    {}
-
-    void TileOffset::Parse(const tinyxml2::XMLNode *tileOffsetNode) 
+namespace Tmx
+{
+    TileOffset::TileOffset()
+        : x(0), y(0)
     {
-        const tinyxml2::XMLElement* tileOffsetElem = tileOffsetNode->ToElement();
-        
+    }
+
+    TileOffset::~TileOffset()
+    {
+    }
+
+    void TileOffset::Parse(const tinyxml2::XMLNode *tileOffsetNode)
+    {
+        const tinyxml2::XMLElement *tileOffsetElem = tileOffsetNode->ToElement();
+
         // Read all the attribute into member variables.
         tileOffsetElem->QueryIntAttribute("x", &x);
         tileOffsetElem->QueryIntAttribute("y", &y);

@@ -25,34 +25,32 @@
 //
 // Author: Tamir Atias
 //-----------------------------------------------------------------------------
-#include <tinyxml2.h>
+#include "../../thirdparty/TinyXML2/tinyxml2.h"
 
-#include "TmxTile.h"
-#include "TmxObject.h"
+#include "TmxParser/TmxTile.h"
+#include "TmxParser/TmxObject.h"
 
 namespace Tmx
 {
-    Tile::Tile() :
-            id(0), properties(), isAnimated(false), hasObjects(false), hasObjectGroup(false), objectGroup(NULL), totalDuration(0), image(NULL), type()
+    Tile::Tile() : id(0), properties(), isAnimated(false), hasObjects(false), hasObjectGroup(false), objectGroup(NULL), totalDuration(0), image(NULL), type()
     {
     }
-    Tile::Tile(int id) :
-            id(id), properties(), isAnimated(false), hasObjects(false), hasObjectGroup(false), objectGroup(NULL), totalDuration(0), image(NULL), type()
+    Tile::Tile(int id) : id(id), properties(), isAnimated(false), hasObjects(false), hasObjectGroup(false), objectGroup(NULL), totalDuration(0), image(NULL), type()
     {
     }
 
     Tile::~Tile()
     {
-        if(image)
+        if (image)
         {
             delete image;
             image = NULL;
         }
-				if (objectGroup)
-				{
-					delete objectGroup;
-					objectGroup = NULL;
-				}
+        if (objectGroup)
+        {
+            delete objectGroup;
+            objectGroup = NULL;
+        }
     }
 
     void Tile::Parse(const tinyxml2::XMLNode *tileNode)
@@ -63,14 +61,14 @@ namespace Tmx
         id = tileElem->IntAttribute("id");
 
         // Parse tile type if it has one.
-        if(tileElem->FindAttribute("type"))
+        if (tileElem->FindAttribute("type"))
         {
             type = std::string(tileElem->Attribute("type"));
         }
 
         // Parse the properties if any.
         const tinyxml2::XMLNode *propertiesNode = tileNode->FirstChildElement(
-                "properties");
+            "properties");
 
         if (propertiesNode)
         {
@@ -79,24 +77,24 @@ namespace Tmx
 
         // Parse the animation if there is one.
         const tinyxml2::XMLNode *animationNode = tileNode->FirstChildElement(
-                "animation");
+            "animation");
 
         if (animationNode)
         {
             isAnimated = true;
 
             const tinyxml2::XMLNode *frameNode =
-                    animationNode->FirstChildElement("frame");
+                animationNode->FirstChildElement("frame");
             unsigned int durationSum = 0;
 
             while (frameNode != NULL)
             {
                 const tinyxml2::XMLElement *frameElement =
-                        frameNode->ToElement();
+                    frameNode->ToElement();
 
                 const int tileID = frameElement->IntAttribute("tileid");
                 const unsigned int duration = frameElement->IntAttribute(
-                        "duration");
+                    "duration");
 
                 frames.push_back(AnimationFrame(tileID, duration));
                 durationSum += duration;
@@ -108,23 +106,22 @@ namespace Tmx
         }
 
         const tinyxml2::XMLNode *objectGroupNode = tileNode->FirstChildElement(
-                "objectgroup");
+            "objectgroup");
         if (objectGroupNode)
         {
-						hasObjectGroup = true;
-						//let's only create objectGroup if it's needed, save memory
-						objectGroup = new ObjectGroup(this);
-						objectGroup->Parse(objectGroupNode);
-						if (objectGroup->GetNumObjects() > 0) hasObjects = true;
-
+            hasObjectGroup = true;
+            // let's only create objectGroup if it's needed, save memory
+            objectGroup = new ObjectGroup(this);
+            objectGroup->Parse(objectGroupNode);
+            if (objectGroup->GetNumObjects() > 0)
+                hasObjects = true;
         }
 
         const tinyxml2::XMLNode *imageNode = tileNode->FirstChildElement("image");
-        if(imageNode)
+        if (imageNode)
         {
             image = new Image();
             image->Parse(imageNode);
         }
-
     }
 }

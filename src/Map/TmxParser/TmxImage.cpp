@@ -25,26 +25,25 @@
 //
 // Author: Tamir Atias
 //-----------------------------------------------------------------------------
-#include <tinyxml2.h>
+#include "../../thirdparty/TinyXML2/tinyxml2.h"
 
-#include "TmxImage.h"
+#include "TmxParser/TmxImage.h"
 
-namespace Tmx 
-{   
-    Image::Image() 
-        : source()
-        , width()
-        , height()
-        , transparent_color()
-    {}
-
-    Image::~Image() 
-    {}
-
-    void Image::Parse(const tinyxml2::XMLNode *imageNode) 
+namespace Tmx
+{
+    Image::Image()
+        : source(), width(), height(), transparent_color()
     {
-        const tinyxml2::XMLElement* imageElem = imageNode->ToElement();
-        
+    }
+
+    Image::~Image()
+    {
+    }
+
+    void Image::Parse(const tinyxml2::XMLNode *imageNode)
+    {
+        const tinyxml2::XMLElement *imageElem = imageNode->ToElement();
+
         // Read all the attribute into member variables.
         source = imageElem->Attribute("source");
 
@@ -52,7 +51,7 @@ namespace Tmx
         height = imageElem->IntAttribute("height");
 
         const char *trans = imageElem->Attribute("trans");
-        if (trans) 
+        if (trans)
         {
             transparent_color = Tmx::Color(trans);
         }

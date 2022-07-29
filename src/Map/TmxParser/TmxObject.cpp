@@ -25,33 +25,20 @@
 //
 // Author: Tamir Atias
 //-----------------------------------------------------------------------------
-#include <tinyxml2.h>
+#include "../../thirdparty/TinyXML2/tinyxml2.h"
 
-#include "TmxObject.h"
-#include "TmxPolygon.h"
-#include "TmxPolyline.h"
-#include "TmxEllipse.h"
-#include "TmxText.h"
+#include "TmxParser/TmxObject.h"
+#include "TmxParser/TmxPolygon.h"
+#include "TmxParser/TmxPolyline.h"
+#include "TmxParser/TmxEllipse.h"
+#include "TmxParser/TmxText.h"
 
 namespace Tmx
 {
     Object::Object()
-        : name()
-        , type()
-        , x(0)
-        , y(0)
-        , width(0)
-        , height(0)
-        , gid(0)
-        , id(0)
-        , rotation(0.0)
-        , visible(true)
-        , ellipse(0)
-        , polygon(0)
-        , polyline(0)
-        , text(0)
-        , properties()
-    {}
+        : name(), type(), x(0), y(0), width(0), height(0), gid(0), id(0), rotation(0.0), visible(true), ellipse(0), polygon(0), polyline(0), text(0), properties()
+    {
+    }
 
     Object::~Object()
     {
@@ -85,8 +72,10 @@ namespace Tmx
         const char *tempName = objectElem->Attribute("name");
         const char *tempType = objectElem->Attribute("type");
 
-        if (tempName) name = tempName;
-        if (tempType) type = tempType;
+        if (tempName)
+            name = tempName;
+        if (tempType)
+            type = tempType;
 
         id = objectElem->IntAttribute("id");
         x = objectElem->IntAttribute("x");
@@ -104,7 +93,7 @@ namespace Tmx
             if (ellipse != 0)
                 delete ellipse;
 
-            ellipse = new Ellipse(x,y,width,height);
+            ellipse = new Ellipse(x, y, width, height);
         }
 
         // Read the Polygon and Polyline of the object if there are any.
@@ -129,7 +118,7 @@ namespace Tmx
         const tinyxml2::XMLNode *textNode = objectNode->FirstChildElement("text");
         if (textNode)
         {
-            if(text != 0)
+            if (text != 0)
                 delete text;
             text = new Text();
             text->Parse(textNode);

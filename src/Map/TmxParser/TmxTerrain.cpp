@@ -25,14 +25,13 @@
 //
 // Author: Tamir Atias
 //-----------------------------------------------------------------------------
-#include <tinyxml2.h>
+#include "../../thirdparty/TinyXML2/tinyxml2.h"
 
-#include "TmxTerrain.h"
+#include "TmxParser/TmxTerrain.h"
 
 namespace Tmx
 {
-    Terrain::Terrain() :
-            name(), tileID(), properties()
+    Terrain::Terrain() : name(), tileID(), properties()
     {
     }
 
@@ -50,7 +49,7 @@ namespace Tmx
 
         // Parse the properties if any.
         const tinyxml2::XMLNode *propertiesNode = terrainNode->FirstChildElement(
-                "properties");
+            "properties");
 
         if (propertiesNode)
         {

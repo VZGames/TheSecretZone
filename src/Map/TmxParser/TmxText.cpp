@@ -25,27 +25,26 @@
 //
 // Author: Adaleigh Martin
 //-----------------------------------------------------------------------------
-#include "TmxText.h"
-#include <tinyxml2.h>
+#include "TmxParser/TmxText.h"
+#include "../../thirdparty/TinyXML2/tinyxml2.h"
 #include <cstdlib>
-
 
 namespace Tmx
 {
     Text::Text()
-    : contents(""), font_family("sans-serif"), pixel_size(16), wrap(false), color(nullptr), bold(false),
-      italic(false), underline(false), strikeout(false), kerning(true),
-      horizontal_alignment(LEFT), vertical_alignment(TOP)
+        : contents(""), font_family("sans-serif"), pixel_size(16), wrap(false), color(nullptr), bold(false),
+          italic(false), underline(false), strikeout(false), kerning(true),
+          horizontal_alignment(LEFT), vertical_alignment(TOP)
     {
     }
 
     Text::~Text()
     {
-      if(color)
-      {
-          delete color;
-          color = nullptr;
-      }
+        if (color)
+        {
+            delete color;
+            color = nullptr;
+        }
     }
 
     void Text::Parse(const tinyxml2::XMLNode *textNode)
@@ -53,7 +52,7 @@ namespace Tmx
         auto textElement = textNode->ToElement();
 
         contents = std::string(textElement->GetText() ? textElement->GetText() : "");
-        if(textElement->FindAttribute("fontfamily"))
+        if (textElement->FindAttribute("fontfamily"))
             font_family = std::string(textElement->Attribute("fontfamily"));
         textElement->QueryIntAttribute("pixelsize", &pixel_size);
         textElement->QueryBoolAttribute("wrap", &wrap);
@@ -63,27 +62,29 @@ namespace Tmx
         textElement->QueryBoolAttribute("strikeout", &strikeout);
         textElement->QueryBoolAttribute("kerning", &kerning);
 
-        if(textElement->FindAttribute("halign")) {
+        if (textElement->FindAttribute("halign"))
+        {
             auto ha_str = std::string(textElement->Attribute("halign"));
-            if(ha_str == "left")
+            if (ha_str == "left")
                 horizontal_alignment = LEFT;
-            else if(ha_str == "center")
+            else if (ha_str == "center")
                 horizontal_alignment = HCENTER;
-            else if(ha_str == "right")
+            else if (ha_str == "right")
                 horizontal_alignment = RIGHT;
         }
 
-        if(textElement->FindAttribute("valign")) {
+        if (textElement->FindAttribute("valign"))
+        {
             auto va_str = std::string(textElement->Attribute("valign"));
-            if(va_str == "top")
+            if (va_str == "top")
                 vertical_alignment = TOP;
-            else if(va_str == "center")
+            else if (va_str == "center")
                 vertical_alignment = VCENTER;
-            else if(va_str == "bottom")
+            else if (va_str == "bottom")
                 vertical_alignment = BOTTOM;
         }
 
-        if(textElement->FindAttribute("color"))
+        if (textElement->FindAttribute("color"))
             color = new Color(textElement->Attribute("color"));
     }
 }

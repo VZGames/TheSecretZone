@@ -21,7 +21,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
-#include <tinyxml2.h>
+#include "../../thirdparty/TinyXML2/tinyxml2.h"
 #include <algorithm>
 
 #ifdef USE_MINIZ
@@ -34,53 +34,29 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "TmxLayer.h"
-#include "TmxUtil.h"
-#include "TmxMap.h"
-#include "TmxTileset.h"
+#include "TmxParser/TmxLayer.h"
+#include "TmxParser/TmxUtil.h"
+#include "TmxParser/TmxMap.h"
+#include "TmxParser/TmxTileset.h"
 
 // Avoid nextParseOrder to be included in the documentation as it is an implementation detail that should not be considered as a part of the API.
 /// @cond INTERNAL
 int Tmx::Layer::nextParseOrder = 0;
 /// @endcond
 
-namespace Tmx 
+namespace Tmx
 {
-    Layer::Layer(const Tmx::Map *_map, const std::string _name, const int _x, const int _y, const int _width, const int _height, const float _opacity, const bool _visible, const LayerType _layerType) 
-        : map(_map)
-				, tile(NULL)
-        , name(_name)
-        , x(_x)
-        , y(_y)
-        , width(_width)
-        , height(_height)
-        , opacity(_opacity)
-        , visible(_visible)
-        , zOrder(nextParseOrder)
-        , parseOrder(nextParseOrder)
-        , layerType(_layerType)
-        , properties()
-    {
-        ++nextParseOrder;
-    }
-		Layer::Layer(const Tmx::Tile *_tile, const std::string _name, const int _x, const int _y, const int _width, const int _height, const float _opacity, const bool _visible, const LayerType _layerType) 
-        : map(NULL)
-				, tile(_tile)
-        , name(_name)
-        , x(_x)
-        , y(_y)
-        , width(_width)
-        , height(_height)
-        , opacity(_opacity)
-        , visible(_visible)
-        , zOrder(nextParseOrder)
-        , parseOrder(nextParseOrder)
-        , layerType(_layerType)
-        , properties()
-    {
-        ++nextParseOrder;
-    }
-    Layer::~Layer() 
-    {
-    }
+  Layer::Layer(const Tmx::Map *_map, const std::string _name, const int _x, const int _y, const int _width, const int _height, const float _opacity, const bool _visible, const LayerType _layerType)
+      : map(_map), tile(NULL), name(_name), x(_x), y(_y), width(_width), height(_height), opacity(_opacity), visible(_visible), zOrder(nextParseOrder), parseOrder(nextParseOrder), layerType(_layerType), properties()
+  {
+    ++nextParseOrder;
+  }
+  Layer::Layer(const Tmx::Tile *_tile, const std::string _name, const int _x, const int _y, const int _width, const int _height, const float _opacity, const bool _visible, const LayerType _layerType)
+      : map(NULL), tile(_tile), name(_name), x(_x), y(_y), width(_width), height(_height), opacity(_opacity), visible(_visible), zOrder(nextParseOrder), parseOrder(nextParseOrder), layerType(_layerType), properties()
+  {
+    ++nextParseOrder;
+  }
+  Layer::~Layer()
+  {
+  }
 }

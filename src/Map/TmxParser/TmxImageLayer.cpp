@@ -21,22 +21,21 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
-#include <tinyxml2.h>
+#include "../../thirdparty/TinyXML2/tinyxml2.h"
 #include <cstdlib>
 #include <cassert> //RJCB
 
-#include "TmxLayer.h"
-#include "TmxImageLayer.h"
-#include "TmxImage.h"
+#include "TmxParser/TmxLayer.h"
+#include "TmxParser/TmxImageLayer.h"
+#include "TmxParser/TmxImage.h"
 
-using std::vector;
 using std::string;
+using std::vector;
 
 namespace Tmx
 {
     ImageLayer::ImageLayer(const Tmx::Map *_map)
-        : Layer(_map, std::string(), 0, 0, 0, 0, 1.0f, true, TMX_LAYERTYPE_IMAGE_LAYER)
-        , image(NULL)
+        : Layer(_map, std::string(), 0, 0, 0, 0, 1.0f, true, TMX_LAYERTYPE_IMAGE_LAYER), image(NULL)
     {
     }
 

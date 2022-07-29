@@ -25,38 +25,28 @@
 //
 // Author: Tamir Atias
 //-----------------------------------------------------------------------------
-#include <tinyxml2.h>
+#include "../../thirdparty/TinyXML2/tinyxml2.h"
 #include <cassert> //RJCB
 
-#include "TmxTileset.h"
-#include "TmxTileOffset.h"
-#include "TmxTerrainArray.h"
-#include "TmxTerrain.h"
-#include "TmxImage.h"
-#include "TmxTile.h"
-#include "TmxMap.h"
+#include "TmxParser/TmxTileset.h"
+#include "TmxParser/TmxTileOffset.h"
+#include "TmxParser/TmxTerrainArray.h"
+#include "TmxParser/TmxTerrain.h"
+#include "TmxParser/TmxImage.h"
+#include "TmxParser/TmxTile.h"
+#include "TmxParser/TmxMap.h"
 
-using std::vector;
 using std::string;
+using std::vector;
 
-namespace Tmx 
+namespace Tmx
 {
-    Tileset::Tileset() 
-        : first_gid(0)
-        , name()
-        , tile_width(0)
-        , tile_height(0)
-        , margin(0)
-        , spacing(0)
-        , tile_count(0)
-        , columns(0)
-        , tileOffset(NULL)
-        , image(NULL)
-        , tiles()
+    Tileset::Tileset()
+        : first_gid(0), name(), tile_width(0), tile_height(0), margin(0), spacing(0), tile_count(0), columns(0), tileOffset(NULL), image(NULL), tiles()
     {
     }
 
-    Tileset::~Tileset() 
+    Tileset::~Tileset()
     {
         // Delete the tile offset from memory if allocated.
         if (tileOffset)
@@ -73,12 +63,12 @@ namespace Tmx
         }
 
         // Iterate through all of the terrain types in the tileset and delete each of them.
-        vector< Terrain* >::iterator ttIter;
-        for (ttIter = terrainTypes.begin(); ttIter != terrainTypes.end(); ++ttIter) 
+        vector<Terrain *>::iterator ttIter;
+        for (ttIter = terrainTypes.begin(); ttIter != terrainTypes.end(); ++ttIter)
         {
             Terrain *terrainType = (*ttIter);
-            
-            if (terrainType) 
+
+            if (terrainType)
             {
                 delete terrainType;
                 terrainType = NULL;
@@ -86,12 +76,12 @@ namespace Tmx
         }
 
         // Iterate through all of the tiles in the tileset and delete each of them.
-        vector< Tile* >::iterator tIter;
-        for (tIter = tiles.begin(); tIter != tiles.end(); ++tIter) 
+        vector<Tile *>::iterator tIter;
+        for (tIter = tiles.begin(); tIter != tiles.end(); ++tIter)
         {
             Tile *tile = (*tIter);
-            
-            if (tile) 
+
+            if (tile)
             {
                 delete tile;
                 tile = NULL;
@@ -99,7 +89,7 @@ namespace Tmx
         }
     }
 
-    void Tileset::Parse(const tinyxml2::XMLNode *tilesetNode, const std::string& file_path)
+    void Tileset::Parse(const tinyxml2::XMLNode *tilesetNode, const std::string &file_path)
     {
         const tinyxml2::XMLElement *tilesetElem = tilesetNode->ToElement();
 
@@ -113,14 +103,14 @@ namespace Tmx
         // the tileset config should be loaded from an external
         // TSX (Tile Set XML) file. That file has the same structure
         // as the <tileset> element in the TMX map.
-        const char* source_name = tilesetElem->Attribute("source");
+        const char *source_name = tilesetElem->Attribute("source");
         tinyxml2::XMLDocument tileset_doc;
-        if ( source_name )
+        if (source_name)
         {
             std::string fileName = file_path + source_name;
-            tileset_doc.LoadFile( fileName.c_str() );
+            tileset_doc.LoadFile(fileName.c_str());
 
-            if ( tileset_doc.ErrorID() != 0)
+            if (tileset_doc.ErrorID() != 0)
             {
                 fprintf(stderr, "failed to load tileset file '%s'\n", fileName.c_str());
                 return;
@@ -128,7 +118,7 @@ namespace Tmx
 
             // Update node and element references to the new node
             tilesetNode = tileset_doc.FirstChildElement("tileset");
-            assert(tilesetNode); //RJCB
+            assert(tilesetNode); // RJCB
 
             tilesetElem = tilesetNode->ToElement();
         }
@@ -151,7 +141,7 @@ namespace Tmx
 
         // Parse the terrain types if any.
         const tinyxml2::XMLNode *terrainTypesNode = tilesetNode->FirstChildElement("terraintypes");
-        if (terrainTypesNode) 
+        if (terrainTypesNode)
         {
             TerrainArray terrainArray;
             terrainArray.Parse(&terrainTypes, terrainTypesNode);
@@ -169,7 +159,7 @@ namespace Tmx
         const tinyxml2::XMLNode *tileNode = tilesetNode->FirstChildElement("tile");
         for (int tId = 0; tileNode; ++tId)
         {
-            Tile* tile = new Tile(tId);
+            Tile *tile = new Tile(tId);
             tile->Parse(tileNode);
             tiles.push_back(tile);
 
@@ -184,11 +174,11 @@ namespace Tmx
         }
     }
 
-    const Tile *Tileset::GetTile(int index) const 
+    const Tile *Tileset::GetTile(int index) const
     {
-        for (unsigned int i = 0; i < tiles.size(); ++i) 
+        for (unsigned int i = 0; i < tiles.size(); ++i)
         {
-            if (tiles.at(i)->GetId() == index) 
+            if (tiles.at(i)->GetId() == index)
                 return tiles.at(i);
         }
 

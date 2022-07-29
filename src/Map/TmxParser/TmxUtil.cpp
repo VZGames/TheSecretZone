@@ -39,82 +39,86 @@
 
 #include <stdio.h>
 
-#include "TmxUtil.h"
-#include "base64/base64.h"
+#include "TmxParser/TmxUtil.h"
+#include "TmxParser/base64/base64.h"
 
-namespace Tmx {
+namespace Tmx
+{
 
     // trim from start
-    static inline std::string &ltrim(std::string &s) {
+    static inline std::string &ltrim(std::string &s)
+    {
         s.erase(s.begin(), std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
         return s;
     }
 
     // trim from end
-    static inline std::string &rtrim(std::string &s) {
+    static inline std::string &rtrim(std::string &s)
+    {
         s.erase(std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
         return s;
     }
 
     // trim from both ends
-    static inline std::string &trim(std::string &s) {
+    static inline std::string &trim(std::string &s)
+    {
         return ltrim(rtrim(s));
     }
 
     std::string &Util::Trim(std::string &str)
     {
-        return trim( str );
+        return trim(str);
     }
 
-    std::string Util::DecodeBase64(const std::string &str) 
+    std::string Util::DecodeBase64(const std::string &str)
     {
         return base64_decode(str);
     }
 
-    char *Util::DecompressGZIP(const char *data, int dataSize, int expectedSize) 
+    char *Util::DecompressGZIP(const char *data, int dataSize, int expectedSize)
     {
         int bufferSize = expectedSize;
         int ret;
         z_stream strm;
-        char *out = (char*)malloc(bufferSize);
+        char *out = (char *)malloc(bufferSize);
 
         strm.zalloc = Z_NULL;
         strm.zfree = Z_NULL;
         strm.opaque = Z_NULL;
-        strm.next_in = (Bytef*)data;
+        strm.next_in = (Bytef *)data;
         strm.avail_in = dataSize;
-        strm.next_out = (Bytef*)out;
+        strm.next_out = (Bytef *)out;
         strm.avail_out = bufferSize;
 
         ret = inflateInit2(&strm, 15 + 32);
 
-        if (ret != Z_OK) 
+        if (ret != Z_OK)
         {
             free(out);
             return NULL;
         }
 
-        do 
+        do
         {
             ret = inflate(&strm, Z_SYNC_FLUSH);
 
-            switch (ret) 
+            switch (ret)
             {
-                case Z_NEED_DICT:
-                case Z_STREAM_ERROR:
-                    ret = Z_DATA_ERROR;
-                case Z_DATA_ERROR:
-                case Z_MEM_ERROR:
-                    inflateEnd(&strm);
-                    free(out);
-                    return NULL;
+            case Z_NEED_DICT:
+            case Z_STREAM_ERROR:
+                ret = Z_DATA_ERROR;
+            case Z_DATA_ERROR:
+            case Z_MEM_ERROR:
+                inflateEnd(&strm);
+                free(out);
+                return NULL;
             }
 
-            if (ret != Z_STREAM_END) 
+            if (ret != Z_STREAM_END)
             {
-                out = (char *) realloc(out, bufferSize * 2);
+                out = (char *)realloc(out, bufferSize * 2);
 
-                if (!out) 
+                if (!out)
                 {
                     inflateEnd(&strm);
                     free(out);
@@ -125,10 +129,9 @@ namespace Tmx {
                 strm.avail_out = bufferSize;
                 bufferSize *= 2;
             }
-        }
-        while (ret != Z_STREAM_END);
+        } while (ret != Z_STREAM_END);
 
-        if (strm.avail_in != 0) 
+        if (strm.avail_in != 0)
         {
             free(out);
             return NULL;

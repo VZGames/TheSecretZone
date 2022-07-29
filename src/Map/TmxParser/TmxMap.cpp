@@ -25,51 +25,31 @@
 //
 // Author: Tamir Atias
 //-----------------------------------------------------------------------------
-#include <tinyxml2.h>
+#include "../../thirdparty/TinyXML2/tinyxml2.h"
 #include <stdio.h>
 
-#include "TmxMap.h"
-#include "TmxTileset.h"
-#include "TmxLayer.h"
-#include "TmxTileLayer.h"
-#include "TmxObjectGroup.h"
-#include "TmxImageLayer.h"
-#include "TmxGroupLayer.h"
+#include "TmxParser/TmxMap.h"
+#include "TmxParser/TmxTileset.h"
+#include "TmxParser/TmxLayer.h"
+#include "TmxParser/TmxTileLayer.h"
+#include "TmxParser/TmxObjectGroup.h"
+#include "TmxParser/TmxImageLayer.h"
+#include "TmxParser/TmxGroupLayer.h"
 
-using std::vector;
 using std::string;
+using std::vector;
 
 namespace Tmx
 {
     Map::Map()
-        : file_name()
-        , file_path()
-        , background_color()
-        , version(0.0)
-        , orientation(TMX_MO_ORTHOGONAL)
-        , render_order(TMX_RIGHT_DOWN)
-        , stagger_axis(TMX_SA_NONE)
-        , stagger_index(TMX_SI_NONE)
-        , width(0)
-        , height(0)
-        , tile_width(0)
-        , tile_height(0)
-        , next_object_id(0)
-        , hexside_length(0)
-        , layers()
-        , tile_layers()
-        , object_groups()
-        , group_layers()
-        , tilesets()
-        , has_error(false)
-        , error_code(0)
-        , error_text()
-    {}
+        : file_name(), file_path(), background_color(), version(0.0), orientation(TMX_MO_ORTHOGONAL), render_order(TMX_RIGHT_DOWN), stagger_axis(TMX_SA_NONE), stagger_index(TMX_SI_NONE), width(0), height(0), tile_width(0), tile_height(0), next_object_id(0), hexside_length(0), layers(), tile_layers(), object_groups(), group_layers(), tilesets(), has_error(false), error_code(0), error_text()
+    {
+    }
 
     Map::~Map()
     {
         // Iterate through all of the object groups and delete each of them.
-        vector< ObjectGroup* >::iterator ogIter;
+        vector<ObjectGroup *>::iterator ogIter;
         for (ogIter = object_groups.begin(); ogIter != object_groups.end(); ++ogIter)
         {
             ObjectGroup *objectGroup = (*ogIter);
@@ -82,7 +62,7 @@ namespace Tmx
         }
 
         // Iterate through all of the tile layers and delete each of them.
-        vector< TileLayer* >::iterator tlIter;
+        vector<TileLayer *>::iterator tlIter;
         for (tlIter = tile_layers.begin(); tlIter != tile_layers.end(); ++tlIter)
         {
             TileLayer *layer = (*tlIter);
@@ -95,7 +75,7 @@ namespace Tmx
         }
 
         // Iterate through all of the image layers and delete each of them.
-        vector< ImageLayer* >::iterator ilIter;
+        vector<ImageLayer *>::iterator ilIter;
         for (ilIter = image_layers.begin(); ilIter != image_layers.end(); ++ilIter)
         {
             ImageLayer *layer = (*ilIter);
@@ -108,7 +88,7 @@ namespace Tmx
         }
 
         // Iterate through all of the tilesets and delete each of them.
-        vector< Tileset* >::iterator tsIter;
+        vector<Tileset *>::iterator tsIter;
         for (tsIter = tilesets.begin(); tsIter != tilesets.end(); ++tsIter)
         {
             Tileset *tileset = (*tsIter);
@@ -120,13 +100,14 @@ namespace Tmx
             }
         }
 
-        vector< GroupLayer* >::iterator glIter;
+        vector<GroupLayer *>::iterator glIter;
         for (glIter = group_layers.begin(); glIter != group_layers.end(); ++glIter)
         {
             GroupLayer *grouplayer = (*glIter);
-            if(grouplayer) {
-              delete grouplayer;
-              grouplayer = NULL;
+            if (grouplayer)
+            {
+                delete grouplayer;
+                grouplayer = NULL;
             }
         }
     }
@@ -149,7 +130,7 @@ namespace Tmx
 
         // Create a tiny xml document and use it to parse the text.
         tinyxml2::XMLDocument doc;
-        doc.LoadFile( fileName.c_str() );
+        doc.LoadFile(fileName.c_str());
 
         // Check for parsing errors.
         if (doc.Error())
@@ -161,7 +142,7 @@ namespace Tmx
         }
 
         tinyxml2::XMLNode *mapNode = doc.FirstChildElement("map");
-        Parse( mapNode );
+        Parse(mapNode);
     }
 
     void Map::ParseText(const string &text)
@@ -180,7 +161,7 @@ namespace Tmx
         }
 
         tinyxml2::XMLNode *mapNode = doc.FirstChildElement("map");
-        Parse( mapNode );
+        Parse(mapNode);
     }
 
     int Map::FindTilesetIndex(int gid) const
@@ -216,7 +197,7 @@ namespace Tmx
 
     void Map::Parse(tinyxml2::XMLNode *mapNode)
     {
-        tinyxml2::XMLElement* mapElem = mapNode->ToElement();
+        tinyxml2::XMLElement *mapElem = mapNode->ToElement();
 
         // Read the map attributes.
         version = mapElem->IntAttribute("version");
@@ -309,16 +290,16 @@ namespace Tmx
 
         // read all other attributes
         const tinyxml2::XMLNode *node = mapElem->FirstChild();
-        while( node )
+        while (node)
         {
             // Read the map properties.
-            if( strcmp( node->Value(), "properties" ) == 0 )
+            if (strcmp(node->Value(), "properties") == 0)
             {
                 properties.Parse(node);
             }
 
             // Iterate through all of the tileset elements.
-            if( strcmp( node->Value(), "tileset" ) == 0 )
+            if (strcmp(node->Value(), "tileset") == 0)
             {
                 // Allocate a new tileset and parse it.
                 Tileset *tileset = new Tileset();
@@ -329,7 +310,7 @@ namespace Tmx
             }
 
             // Iterate through all of the "layer" (tile layer) elements.
-            if( strcmp( node->Value(), "layer" ) == 0 )
+            if (strcmp(node->Value(), "layer") == 0)
             {
                 // Allocate a new tile layer and parse it.
                 TileLayer *tileLayer = new TileLayer(this);
@@ -341,7 +322,7 @@ namespace Tmx
             }
 
             // Iterate through all of the "imagelayer" (image layer) elements.
-            if( strcmp( node->Value(), "imagelayer" ) == 0 )
+            if (strcmp(node->Value(), "imagelayer") == 0)
             {
                 // Allocate a new image layer and parse it.
                 ImageLayer *imageLayer = new ImageLayer(this);
@@ -353,7 +334,7 @@ namespace Tmx
             }
 
             // Iterate through all of the "objectgroup" (object layer) elements.
-            if( strcmp( node->Value(), "objectgroup" ) == 0 )
+            if (strcmp(node->Value(), "objectgroup") == 0)
             {
                 // Allocate a new object group and parse it.
                 ObjectGroup *objectGroup = new ObjectGroup(this);
@@ -364,7 +345,7 @@ namespace Tmx
                 layers.push_back(objectGroup);
             }
 
-            if( strcmp( node->Value(), "group") == 0 )
+            if (strcmp(node->Value(), "group") == 0)
             {
                 GroupLayer *groupLayer = new GroupLayer(this);
                 groupLayer->Parse(node);

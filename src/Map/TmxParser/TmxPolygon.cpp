@@ -25,12 +25,12 @@
 //
 // Author: Tamir Atias
 //-----------------------------------------------------------------------------
-#include <tinyxml2.h>
-#include <cstdlib> 
+#include "../../thirdparty/TinyXML2/tinyxml2.h"
+#include <cstdlib>
 
-#include "TmxPolygon.h"
+#include "TmxParser/TmxPolygon.h"
 
-namespace Tmx 
+namespace Tmx
 {
     Polygon::Polygon()
         : points()
@@ -40,7 +40,7 @@ namespace Tmx
     void Polygon::Parse(const tinyxml2::XMLNode *polygonNode)
     {
         char *pointsLine = strdup(polygonNode->ToElement()->Attribute("points"));
-        
+
         char *token = strtok(pointsLine, " ");
         while (token)
         {
