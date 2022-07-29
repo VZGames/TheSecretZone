@@ -19,5 +19,5 @@ void Animation::Update()
 
 void Animation::Draw(Vector2I p_Pos, int p_Width, int p_Height)
 {
-    Renderer::GetInstance()->DrawFrame(m_TextureID, p_Pos, p_Width, p_Height, m_SpriteRow, m_SpriteFrame, m_Flip, m_Angle);
+    TextureManager::GetInstance()->DrawFrame(m_TextureID, p_Pos, p_Width, p_Height, m_SpriteRow, m_SpriteFrame, m_Flip, m_Angle);
 }

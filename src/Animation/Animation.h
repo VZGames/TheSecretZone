@@ -2,7 +2,7 @@
 #define __ANIMATION_H__
 
 #include "SDL2/SDL.h"
-#include "../Renderer/Renderer.h"
+#include "../Graphics/TextureManager/TextureManager.h"
 #include "../Physics/vector2D.h"
 
 class Animation

@@ -1,10 +1,11 @@
 #include "Engine.h"
 #include "../Objects/Player/Player.h"
-
+#include "../Map/MapParser.h"
 SDL_Renderer *Engine::s_Renderer = nullptr;
 Engine *Engine::s_Instance = nullptr;
 bool Engine::s_Running = false;
 Player *player = nullptr;
+GameMap *Engine::s_GameMap = nullptr;
 
 Engine::Engine()
     : m_Window(nullptr)
@@ -36,10 +37,15 @@ void Engine::Init(const char *p_Title, int p_Width, int p_Height)
     if (s_Renderer)
     {
         // Select the color for drawing.
-        SDL_SetRenderDrawColor(s_Renderer, 0, 0, 0, 255);
+        SDL_SetRenderDrawColor(s_Renderer, 255, 255, 255, 255);
     }
 
-    Renderer::GetInstance()->LoadTexture("Player1", "assets/sprites/Characters/BunnyCharacterSpriteSheet.png");
+    if (!MapParser::GetInstance()->Load("Map", "assets/maps/phuhoa.tmx"))
+    {
+        SDL_Log("\nFailed to load map");
+    }
+    s_GameMap = MapParser::GetInstance()->GetMap("Map");
+    TextureManager::GetInstance()->LoadTexture("Player1", "assets/sprites/Characters/BunnyCharacterSpriteSheet.png");
     player = new Player(new Properties("Player1", Vector2I(100, 200), 48, 48));
     s_Running = true;
 }
@@ -69,7 +75,8 @@ void Engine::Loop()
 
 void Engine::Clean()
 {
-    Renderer::GetInstance()->Clean();
+    MapParser::GetInstance()->Clean();
+    TextureManager::GetInstance()->Clean();
     // Close and destroy the window and the renderer
     SDL_DestroyWindow(m_Window);
     SDL_DestroyRenderer(s_Renderer);
@@ -78,6 +85,7 @@ void Engine::Clean()
 void Engine::Render()
 {
     SDL_RenderClear(s_Renderer);
+    s_GameMap->Render();
     player->Render();
     SDL_RenderPresent(s_Renderer);
 }
@@ -86,6 +94,7 @@ void Engine::Update()
 {
     float dt = Timer::GetInstance()->GetDeltaTime();
     player->Update(dt);
+    s_GameMap->Update();
 }
 
 void Engine::HandleEvents()

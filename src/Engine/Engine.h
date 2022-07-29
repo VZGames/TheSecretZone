@@ -5,9 +5,10 @@
 
 #include <stdio.h>
 #include "SDL2/SDL.h"
-#include "../Renderer/Renderer.h"
+#include "../Graphics/TextureManager/TextureManager.h"
 #include "../Input/Input.h"
 #include "../Timer/Timer.h"
+#include "../Map/GameMap.h"
 class Engine
 {
 private:
@@ -16,6 +17,7 @@ private:
     void Update();
     void HandleEvents();
     SDL_Window *m_Window;
+    static GameMap *s_GameMap;
     static Engine *s_Instance;
 
 public:
