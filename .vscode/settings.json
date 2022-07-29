@@ -56,5 +56,5 @@
 		"cstring": "cpp",
 		"ctime": "cpp"
 	},
-	"cSpell.words": ["tinyxml"]
+	"cSpell.words": ["Tileset", "tinyxml"]
 }
