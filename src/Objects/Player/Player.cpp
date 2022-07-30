@@ -13,30 +13,30 @@ void Player::Render()
 
 void Player::Update(float p_DeltaTime)
 {
-    m_Animation->SetProps(m_Properties->m_TexTureID, m_CurrentRow, 2, 160);
+    m_Animation->SetProps(m_Properties->m_TexTureID, m_CurrentRow, 2, 200);
 
     if (Input::GetInstance()->GetKeyDown(SDL_SCANCODE_A))
     {
         m_CurrentRow = 3;
-        m_Animation->SetProps(m_Properties->m_TexTureID, 3, 4, 160);
+        m_Animation->SetProps(m_Properties->m_TexTureID, 3, 4, 200);
         m_Transform->TranslateX(BACKWARD);
     }
     if (Input::GetInstance()->GetKeyDown(SDL_SCANCODE_D))
     {
         m_CurrentRow = 4;
-        m_Animation->SetProps(m_Properties->m_TexTureID, 4, 4, 160);
+        m_Animation->SetProps(m_Properties->m_TexTureID, 4, 4, 200);
         m_Transform->TranslateX(FORWARD);
     }
     if (Input::GetInstance()->GetKeyDown(SDL_SCANCODE_W))
     {
         m_CurrentRow = 2;
-        m_Animation->SetProps(m_Properties->m_TexTureID, 2, 4, 160);
+        m_Animation->SetProps(m_Properties->m_TexTureID, 2, 4, 200);
         m_Transform->TranslateY(UPWARD);
     }
     if (Input::GetInstance()->GetKeyDown(SDL_SCANCODE_S))
     {
         m_CurrentRow = 1;
-        m_Animation->SetProps(m_Properties->m_TexTureID, 1, 4, 160);
+        m_Animation->SetProps(m_Properties->m_TexTureID, 1, 4, 200);
         m_Transform->TranslateY(DOWNWARD);
     }
 

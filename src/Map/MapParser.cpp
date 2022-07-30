@@ -83,6 +83,7 @@ TileLayer *MapParser::ParseTileLayer(TiXmlElement *p_xmlPlayer, TilesetsList p_t
         if (e->Value() == std::string("data"))
         {
             data = e;
+            SDL_Log("Reading Data");
             break;
         }
     }

@@ -6,14 +6,14 @@ TileLayer::TileLayer(int p_tileSize, int p_numRows, int p_numCols, TileMap p_Til
 {
     for (unsigned int i = 0; i < m_Tilesets.size(); i++)
     {
-        std::string path = "res/maps/" + m_Tilesets[i].Source;
+        std::string path = "assets/maps/" + m_Tilesets[i].Source;
         TextureManager::GetInstance()->LoadTexture(m_Tilesets[i].Name, path.c_str());
     }
 }
 
 void TileLayer::Render()
 {
-    SDL_Log("TILELAYER: RENDER");
+    SDL_Log("TILE LAYER: RENDER");
     for (unsigned int i = 0; i < m_NumRows; i++)
     {
         for (unsigned int j = 0; j < m_NumCols; j++)
@@ -57,5 +57,5 @@ void TileLayer::Render()
 }
 void TileLayer::Update()
 {
-    SDL_Log("TILELAYER UPDATE");
+    SDL_Log("TILE LAYER UPDATE");
 }

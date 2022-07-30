@@ -56,5 +56,15 @@
 		"cstring": "cpp",
 		"ctime": "cpp"
 	},
-	"cSpell.words": ["Tileset", "tinyxml"]
+	"cSpell.words": [
+		"firstgid",
+		"HIGHDPI",
+		"tilecount",
+		"tilemap",
+		"Tileset",
+		"Tilesets",
+		"tilewidth",
+		"tinyxml",
+		"WINDOWPOS"
+	]
 }
