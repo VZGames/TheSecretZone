@@ -1,14 +1,14 @@
 #ifndef __TILE_LAYER_H__
 #define __TILE_LAYER_H__
-
+#include <iostream>
 #include <vector>
 #include <string>
 #include "Layer.h"
 
 struct Tileset
 {
-    char *Name;
-    std::string Source;
+    const char *Name;
+    const char *Source;
     int FirstID, LastID;
     int NumRows, NumCols;
     int TileCout, TileSize;
@@ -26,8 +26,8 @@ private:
 
 public:
     TileLayer(int p_tileSize, int p_numRows, int p_numCols, TileMap p_TileMap, TilesetsList p_tilesets);
-    virtual void Render();
-    virtual void Update();
+    virtual void Render() override;
+    virtual void Update() override;
     inline TileMap GetTileMap() { return m_TileMap; }
 };
 

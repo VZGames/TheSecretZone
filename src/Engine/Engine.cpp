@@ -40,7 +40,7 @@ void Engine::Init(const char *p_Title, int p_Width, int p_Height)
         SDL_SetRenderDrawColor(s_Renderer, 255, 255, 255, 255);
     }
 
-    if (!MapParser::GetInstance()->Load("Map", "assets/maps/phuhoa.tmx"))
+    if (!MapParser::GetInstance()->Load("Map", "assets/maps/phu_hoa.tmx"))
     {
         SDL_Log("\nFailed to load map");
     }
