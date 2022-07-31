@@ -1,9 +1,5 @@
 #include "MapParser.h"
 
-#include <string>
-#include <sstream>
-#include <iostream>
-
 MapParser *MapParser::s_Instance = nullptr;
 
 bool MapParser::Load(const char *p_MapID, const char *p_FilePath)
@@ -87,11 +83,10 @@ TileLayer *MapParser::ParseTileLayer(TiXmlElement *p_xmlPlayer, TilesetsList p_t
             break;
         }
     }
-
     std::string matrix(data->GetText());
     std::istringstream iss(matrix);
     std::string id;
-
+    // std::ofstream rc("assets/maps/test.txt");
     TileMap tilemap(p_numRows, std::vector<int>(p_numCols, 0));
     for (int row = 0; row < p_numRows; row++)
     {

@@ -7,6 +7,7 @@ TextureManager::TextureManager()
 
 void TextureManager::LoadTexture(const char *p_TextureID, const char *p_FilePath)
 {
+    SDL_Log(p_FilePath);
     SDL_Surface *surface = IMG_Load(p_FilePath);
     SDL_Texture *tex = SDL_CreateTextureFromSurface(Engine::s_Renderer, surface);
 

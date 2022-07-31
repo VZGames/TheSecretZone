@@ -54,7 +54,19 @@
 		"fstream": "cpp",
 		"sstream": "cpp",
 		"cstring": "cpp",
-		"ctime": "cpp"
+		"ctime": "cpp",
+		"chrono": "cpp",
+		"condition_variable": "cpp",
+		"forward_list": "cpp",
+		"unordered_set": "cpp",
+		"optional": "cpp",
+		"ratio": "cpp",
+		"iomanip": "cpp",
+		"mutex": "cpp",
+		"semaphore": "cpp",
+		"stop_token": "cpp",
+		"thread": "cpp",
+		"variant": "cpp"
 	},
 	"cSpell.words": [
 		"firstgid",

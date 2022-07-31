@@ -1,6 +1,10 @@
 #ifndef __MAP_PARSER_H__
 #define __MAP_PARSER_H__
 
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <iostream>
 #include <map>
 #include "SDL2/SDL.h"
 #include "GameMap.h"

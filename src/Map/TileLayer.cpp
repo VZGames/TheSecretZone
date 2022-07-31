@@ -6,11 +6,10 @@ TileLayer::TileLayer(int p_tileSize, int p_numRows, int p_numCols, TileMap p_Til
 {
     for (unsigned int i = 0; i < m_Tilesets.size(); i++)
     {
-        const char *dest = "assets";
         const char *src = m_Tilesets[i].Source; // ../sprites/xxxx/xxxx
         std::string path = src;
-        path = dest + path.substr(2, path.size() - 1); // assets/sprites/xxxx/xxxx
-        SDL_Log(path.c_str());
+        path = "assets" + path.substr(2, path.size() - 1); // assets/sprites/xxxx/xxxx
+
         TextureManager::GetInstance()->LoadTexture(m_Tilesets[i].Name, path.c_str());
     }
 }
@@ -23,7 +22,6 @@ void TileLayer::Render()
         for (unsigned int j = 0; j < m_NumCols; j++)
         {
             int tileID = m_TileMap[i][j];
-            std::cout << tileID << std::endl;
             if (tileID == 0)
             {
                 continue;
@@ -53,8 +51,6 @@ void TileLayer::Render()
                     tileRow--;
                     tileCol = ts.NumCols - 1;
                 }
-
-                std::cout << "TileName" << ts.Name << ", TileSize" << ts.TileSize << std::endl;
                 TextureManager::GetInstance()
                     ->DrawTile(ts.Name, ts.TileSize, Vector2I(j * ts.TileSize, i * ts.TileSize), tileRow, tileCol);
             }
