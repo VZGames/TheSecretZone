@@ -83,11 +83,12 @@ TileLayer *MapParser::ParseTileLayer(TiXmlElement *p_xmlPlayer, TilesetsList p_t
             break;
         }
     }
-    std::string matrix(data->GetText());
+    const char *_data = data->GetText();
+    std::string matrix(_data);
     std::istringstream iss(matrix);
     std::string id;
     // std::ofstream rc("assets/maps/test.txt");
-    TileMap tilemap(p_numRows, std::vector<int>(p_numCols, 0));
+    TileMap tilemap(p_numRows, std::vector<int>(p_numCols, 1));
     for (int row = 0; row < p_numRows; row++)
     {
         for (int col = 0; col < p_numCols; col++)
