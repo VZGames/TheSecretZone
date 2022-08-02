@@ -3,7 +3,7 @@
 
 int main(int argc, char *argv[])
 {
-    SDL_Log("\n");
+    std::cout << "\n";
     if (Engine::GetInstance()->Init("The Secret Zone"))
     {
         Engine::GetInstance()->Loop();
@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
     else
     {
         SDL_Log("Can't initialize Game Engine");
+        return 1;
     }
 
     return 0;
