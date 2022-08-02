@@ -110,5 +110,5 @@ void MapParser::Clean()
         i.second = nullptr;
     }
     m_MapDict.clear();
-    SDL_Log("\nGameMap cleaned");
+    SDL_Log("GameMap cleaned");
 }

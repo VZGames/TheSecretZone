@@ -33,7 +33,7 @@ void TileLayer::Render()
                 {
                     for (unsigned int k = 1; k < m_Tilesets.size(); k++)
                     {
-                        if (tileID >= m_Tilesets[k].FirstID && tileID <= m_Tilesets[k].LastID)
+                        if (tileID > m_Tilesets[k].FirstID && tileID < m_Tilesets[k].LastID)
                         {
                             tileID = tileID + m_Tilesets[k].TileCout - m_Tilesets[k].LastID;
                             index = k;

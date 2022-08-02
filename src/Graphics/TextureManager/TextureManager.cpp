@@ -82,5 +82,5 @@ void TextureManager::Clean()
         SDL_DestroyTexture(i.second);
     }
     m_TextureDict.clear();
-    SDL_Log("\nTexture cleaned");
+    SDL_Log("Texture cleaned");
 }

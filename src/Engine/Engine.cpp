@@ -1,21 +1,38 @@
 #include "Engine.h"
 #include "../Objects/Player/Player.h"
-#include "../Map/MapParser.h"
 SDL_Renderer *Engine::s_Renderer = nullptr;
 Engine *Engine::s_Instance = nullptr;
 bool Engine::s_Running = false;
 Player *player = nullptr;
-GameMap *Engine::s_GameMap = nullptr;
 
 Engine::Engine()
     : m_Window(nullptr)
 {
 }
 
-void Engine::Init(const char *p_Title, int p_Width, int p_Height)
+bool Engine::Init(const char *p_Title, int p_Width, int p_Height)
 {
-    // initialize SDL
-    SDL_Init(SDL_INIT_VIDEO);
+    if (SDL_Init(SDL_INIT_VIDEO) != 0)
+    {
+        SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
+        return 0;
+    }
+    if (SDLNet_Init() != 0)
+    {
+        SDL_Log("Unable to initialize SDL Net: %s", SDL_GetError());
+        return 0;
+    }
+    if (!(IMG_Init(IMG_INIT_PNG)))
+    {
+        SDL_Log("Unable to initialize SDL Image: %s", SDL_GetError());
+        return 0;
+    }
+    if (TTF_Init() != 0)
+    {
+        SDL_Log("Unable to initialize SDL Font: %s", SDL_GetError());
+        return 0;
+    }
+
     /*
         Create Window with:
         - title
@@ -40,14 +57,11 @@ void Engine::Init(const char *p_Title, int p_Width, int p_Height)
         SDL_SetRenderDrawColor(s_Renderer, 255, 255, 255, 255);
     }
 
-    if (!MapParser::GetInstance()->Load("Map", "assets/maps/phu_hoa.tmx"))
-    {
-        SDL_Log("\nFailed to load map");
-    }
-    s_GameMap = MapParser::GetInstance()->GetMap("Map");
     TextureManager::GetInstance()->LoadTexture("Player1", "assets/sprites/Characters/BunnyCharacterSpriteSheet.png");
     player = new Player(new Properties("Player1", Vector2I(100, 200), 48, 48));
     s_Running = true;
+
+    return 1;
 }
 
 void Engine::Loop()
@@ -75,7 +89,6 @@ void Engine::Loop()
 
 void Engine::Clean()
 {
-    MapParser::GetInstance()->Clean();
     TextureManager::GetInstance()->Clean();
     // Close and destroy the window and the renderer
     SDL_DestroyWindow(m_Window);
@@ -85,7 +98,6 @@ void Engine::Clean()
 void Engine::Render()
 {
     SDL_RenderClear(s_Renderer);
-    s_GameMap->Render();
     player->Render();
     SDL_RenderPresent(s_Renderer);
 }
@@ -94,7 +106,6 @@ void Engine::Update()
 {
     float dt = Timer::GetInstance()->GetDeltaTime();
     player->Update(dt);
-    s_GameMap->Update();
 }
 
 void Engine::HandleEvents()
@@ -106,4 +117,7 @@ void Engine::Quit()
 {
     // Clean up
     SDL_Quit();
+    TTF_Quit();
+    IMG_Quit();
+    SDLNet_Quit();
 }

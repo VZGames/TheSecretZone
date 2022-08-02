@@ -5,10 +5,13 @@
 
 #include <stdio.h>
 #include "SDL2/SDL.h"
+#include "SDL2/SDL_net.h"
+#include "SDL2/SDL_image.h"
+#include "SDL2/SDL_ttf.h"
+#include "SDL2/SDL_mixer.h"
 #include "../Graphics/TextureManager/TextureManager.h"
 #include "../Input/Input.h"
 #include "../Timer/Timer.h"
-#include "../Map/GameMap.h"
 class Engine
 {
 private:
@@ -17,11 +20,10 @@ private:
     void Update();
     void HandleEvents();
     SDL_Window *m_Window;
-    static GameMap *s_GameMap;
     static Engine *s_Instance;
 
 public:
-    void Init(const char *p_Title, int p_Width = WINDOW_WIDTH, int p_Height = WINDOW_HEIGHT);
+    bool Init(const char *p_Title, int p_Width = WINDOW_WIDTH, int p_Height = WINDOW_HEIGHT);
     void Loop();
     void Clean();
     void Quit();
