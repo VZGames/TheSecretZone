@@ -4,6 +4,7 @@
 #define WINDOW_HEIGHT 640
 
 #include <stdio.h>
+#include <vector>
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_net.h"
 #include "SDL2/SDL_image.h"
@@ -12,17 +13,27 @@
 #include "../Graphics/TextureManager/TextureManager.h"
 #include "../Input/Input.h"
 #include "../Timer/Timer.h"
+
+#include "../Objects/Player/Player.h"
+
+class Player;
+
 class Engine
 {
+private:
+    int m_PlayerCount;
+    SDL_Window *m_Window;
+    static Engine *s_Instance;
+    Player *m_PLayers;
+
 private:
     Engine();
     void Render();
     void Update();
     void HandleEvents();
-    SDL_Window *m_Window;
-    static Engine *s_Instance;
 
 public:
+    ~Engine();
     bool Init(const char *p_Title, int p_Width = WINDOW_WIDTH, int p_Height = WINDOW_HEIGHT);
     void Loop();
     void Clean();

@@ -3,7 +3,7 @@
 
 int main(int argc, char *argv[])
 {
-    std::cout << "\n";
+    std::cout << "Hello Dev\n";
     if (Engine::GetInstance()->Init("The Secret Zone"))
     {
         Engine::GetInstance()->Loop();

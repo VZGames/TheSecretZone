@@ -1,13 +1,14 @@
 #include "Engine.h"
-#include "../Objects/Player/Player.h"
+
 SDL_Renderer *Engine::s_Renderer = nullptr;
 Engine *Engine::s_Instance = nullptr;
 bool Engine::s_Running = false;
-Player *player = nullptr;
 
 Engine::Engine()
     : m_Window(nullptr)
 {
+    m_PlayerCount = 10;
+    m_PLayers = new Player[m_PlayerCount];
 }
 
 bool Engine::Init(const char *p_Title, int p_Width, int p_Height)
@@ -57,8 +58,14 @@ bool Engine::Init(const char *p_Title, int p_Width, int p_Height)
         SDL_SetRenderDrawColor(s_Renderer, 255, 255, 255, 255);
     }
 
-    TextureManager::GetInstance()->LoadTexture("Player1", "assets/sprites/Characters/BunnyCharacterSpriteSheet.png");
-    player = new Player(new Properties("Player1", Vector2I(100, 200), 48, 48));
+    const std::vector<const char *> players = {"Player1", "Player2", "Player3", "Player4", "Player5", "Player6", "Player7", "Player8", "Player9", "Player10"};
+    for (int i = 0; i < m_PlayerCount; i++)
+    {
+        TextureManager::GetInstance()->LoadTexture(players.at(i), "assets/sprites/Characters/BunnyCharacterSpriteSheet.png");
+        Player *player = new Player(new Properties(players.at(i), Vector2I(100 + (i * 50), 100), 48, 48));
+        m_PLayers[i] = *player;
+    }
+
     s_Running = true;
 
     return 1;
@@ -98,19 +105,32 @@ void Engine::Clean()
 void Engine::Render()
 {
     SDL_RenderClear(s_Renderer);
-    player->Render();
+    for (int i = 0; i < m_PlayerCount; i++)
+    {
+        m_PLayers[i].Render();
+    }
+
     SDL_RenderPresent(s_Renderer);
 }
 
 void Engine::Update()
 {
     float dt = Timer::GetInstance()->GetDeltaTime();
-    player->Update(dt);
+    for (int i = 0; i < m_PlayerCount; i++)
+    {
+        m_PLayers[i].Update(dt);
+    }
 }
 
 void Engine::HandleEvents()
 {
     Input::GetInstance()->Listen();
+}
+
+Engine::~Engine()
+{
+    delete m_PLayers;
+    m_PLayers = NULL;
 }
 
 void Engine::Quit()

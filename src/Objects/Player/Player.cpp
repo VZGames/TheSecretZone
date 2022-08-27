@@ -1,9 +1,21 @@
 #include "Player.h"
+
+Player::Player()
+    : GameObject(new Properties("", Vector2I(0, 0), 0, 0))
+{
+}
+
 Player::Player(Properties *p_Props)
     : GameObject(p_Props)
 {
     m_Animation = new Animation();
     m_Animation->SetProps(p_Props->m_TexTureID, 1, 2, 200);
+}
+
+Player::~Player()
+{
+    delete m_Animation;
+    m_Animation = NULL;
 }
 
 void Player::Render()
