@@ -15,15 +15,17 @@
 #include "../Timer/Timer.h"
 
 #include "../Objects/Player/Player.h"
+#include "../Map/MapParser.h"
 
 class Player;
 
 class Engine
 {
 private:
-    int m_PlayerCount;
+    int m_PlayerCount, m_MapUrlCount;
     SDL_Window *m_Window;
     static Engine *s_Instance;
+    char *m_MapUrls;
     Player *m_PLayers;
 
 private:

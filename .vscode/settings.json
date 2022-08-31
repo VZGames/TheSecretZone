@@ -70,7 +70,10 @@
 	},
 	"cSpell.words": [
 		"firstgid",
+		"GAMEMAP",
 		"HIGHDPI",
+		"MAPPARSER",
+		"SmartPtr",
 		"tilecount",
 		"tileheight",
 		"tilemap",

@@ -3,11 +3,14 @@
 SDL_Renderer *Engine::s_Renderer = nullptr;
 Engine *Engine::s_Instance = nullptr;
 bool Engine::s_Running = false;
+MapParser *MapParser::s_Instance = nullptr;
 
 Engine::Engine()
     : m_Window(nullptr)
 {
+    m_MapUrlCount = 1;
     m_PlayerCount = 10;
+    m_MapUrls = new char[m_MapUrlCount];
     m_PLayers = new Player[m_PlayerCount];
 }
 
@@ -47,7 +50,7 @@ bool Engine::Init(const char *p_Title, int p_Width, int p_Height)
     if (m_Window == NULL)
     {
         // In the case that the window could not be made...
-        printf("Could not create window: %s\n", SDL_GetError());
+        SDL_Log("Could not create window: %s\n", SDL_GetError());
     }
 
     s_Renderer = SDL_CreateRenderer(m_Window, -1, SDL_RENDERER_ACCELERATED);
@@ -58,7 +61,15 @@ bool Engine::Init(const char *p_Title, int p_Width, int p_Height)
         SDL_SetRenderDrawColor(s_Renderer, 255, 255, 255, 255);
     }
 
+    if (!MapParser::GetInstance()->loadXML("assets/maps/phu_hoa.tmx"))
+    {
+        SDL_Log("Failed to load map");
+        return 0;
+    }
+
+    const std::vector<const char *> mapUrls = {"assets/maps/phu_hoa.tmx"};
     const std::vector<const char *> players = {"Player1", "Player2", "Player3", "Player4", "Player5", "Player6", "Player7", "Player8", "Player9", "Player10"};
+
     for (int i = 0; i < m_PlayerCount; i++)
     {
         TextureManager::GetInstance()->LoadTexture(players.at(i), "assets/sprites/Characters/BunnyCharacterSpriteSheet.png");

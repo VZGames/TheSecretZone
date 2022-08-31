@@ -49,5 +49,7 @@ file(COPY
        "${CMAKE_SOURCE_DIR}/assets/"
        DESTINATION ${CMAKE_BINARY_DIR}/assets)
 
+set_target_properties(MyUtils PROPERTIES LINKER_LANGUAGE CXX)
+
 # SDL2MAIN_LIBRARY is needed for Windows specific main function.
-target_link_libraries(${PROJECT_NAME} ${LINKER_LIBRARY})
+target_link_libraries(${PROJECT_NAME} ${LINKER_LIBRARY} MyUtils TinyTmx2 TinyTmx2_6_2)
