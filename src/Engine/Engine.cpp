@@ -9,7 +9,7 @@ Engine::Engine()
     : m_Window(nullptr)
 {
     m_MapUrlCount = 1;
-    m_PlayerCount = 10;
+    m_PlayerCount = 2;
     m_MapUrls = new char[m_MapUrlCount];
     m_PLayers = new Player[m_PlayerCount];
 }
@@ -61,20 +61,26 @@ bool Engine::Init(const char *p_Title, int p_Width, int p_Height)
         SDL_SetRenderDrawColor(s_Renderer, 255, 255, 255, 255);
     }
 
-    if (!MapParser::GetInstance()->loadXML("assets/maps/phu_hoa.tmx"))
+    if (!MapParser::GetInstance()->loadXML("assets/maps/test.tmx"))
     {
         SDL_Log("Failed to load map");
         return 0;
     }
 
     const std::vector<const char *> mapUrls = {"assets/maps/phu_hoa.tmx"};
-    const std::vector<const char *> players = {"Player1", "Player2", "Player3", "Player4", "Player5", "Player6", "Player7", "Player8", "Player9", "Player10"};
+    std::map<const char *, const char *> players;
+    players["Player 1"] = "assets/sprites/Characters/BunnyCharacterSpriteSheet.png";
+    players["Player 2"] = "assets/sprites/Characters/BunnyCharacterSpriteSheet.png";
 
-    for (int i = 0; i < m_PlayerCount; i++)
+    std::map<const char *, const char *>::iterator playerItr;
+    int playerIndex = 0;
+    for (playerItr = players.begin(); playerItr != players.end(); playerItr++)
     {
-        TextureManager::GetInstance()->LoadTexture(players.at(i), "assets/sprites/Characters/BunnyCharacterSpriteSheet.png");
-        Player *player = new Player(new Properties(players.at(i), Vector2I(100 + (i * 50), 100), 48, 48));
-        m_PLayers[i] = *player;
+        TextureManager::GetInstance()
+            ->LoadTexture(playerItr->first, playerItr->second);
+        Player *player = new Player(new Properties(playerItr->first, Vector2I(100 + (playerIndex * 50), 100), 48, 48));
+        m_PLayers[playerIndex] = *player;
+        playerIndex++;
     }
 
     s_Running = true;

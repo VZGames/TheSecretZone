@@ -24,6 +24,14 @@ public:
     // like a pointer (useful if T represents
     // a class or struct or union type)
     T *operator->() { return m_Ptr; }
+
+    T &operator[](int i) { return m_Ptr[i]; }
+
+    // T *operator=(const T &p)
+    // {
+    //     m_Ptr = p;
+    //     return *this;
+    // }
 };
 
 #endif // __SmartPtr_H__
