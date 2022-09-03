@@ -93,51 +93,40 @@ void MapParser::parseData(XMLElement *p_DataElement, int p_Width, int p_Height, 
 
     std::string id;
     std::istringstream iss(p_DataElement->GetText());
-
-    int tileCount = p_Height * p_Width;
-    int segmentCount = (tileCount) / p_WorkerCount;
-    int *tileMatrix = new int[tileCount];
-    std::thread *workers = new std::thread[p_WorkerCount];
-    for (int i = 0; i < tileCount; i++)
+    int count = p_Height * p_Width;
+    int *matrix = new int[count];
+    for (int i = 0; i < count; i++)
     {
-        tileMatrix[i] = 0;
-    }
-    for (int i = 0; i < p_WorkerCount; i++)
-    {
-        int start = i * segmentCount;
-        int end = start + segmentCount;
-
         getline(iss, id, ',');
         std::stringstream convertor(id);
-        if (!iss.good())
-            break;
-        if (i == 3)
-        {
-            end = (tileCount);
-        }
-        auto converter = [&i, &tileMatrix, &convertor, &iss](int &p_Start, int &p_End)
-        {
-            SDL_Log("Start: %d, End: %d", p_Start, p_End);
-            for (; p_Start < p_End; p_Start++)
-            {
-                int a;
-                convertor >> a;
-
-                SDL_Log("thread: %d %d", i, a);
-            }
-        };
-        workers[i] = std::thread(std::bind(converter, start, end));
+        convertor >> *(matrix + i); // matrix[i]; (matrix <=> address 0th element of 1-D array )
     }
-    for (int i = 0; i < p_WorkerCount; i++)
+
+    /* int arr[p_Height][p_Width];
+    int(*matrix)[p_Width] = arr;
+
+    for (int i = 0; i < p_Height; i++)
     {
-        workers[i].join();
+        for (int j = 0; j < p_Width; j++)
+        {
+            int k;
+            getline(iss, id, ',');
+            std::stringstream convertor(id);
+            convertor >> k;
+            *(matrix[i] + j) = k; // *(*(matrix + i) + j), *(matrix + i) <=> matrix[i] <=> address 0th element of ith 1-D array of 2-D array
+        }
     }
 
+    for (int i = 0; i < p_Height; i++)
+    {
+        for (int j = 0; j < p_Width; j++)
+        {
+            SDL_Log("matrix[%d][%d]: %d", i, j, matrix[i][j]);
+        }
+    } */
     t = clock() - t;
 
     SDL_Log("It took time %f", (float)t / CLOCKS_PER_SEC);
-    delete[] workers;
-    workers = NULL;
 }
 
 bool MapParser::loadXML(const char *p_filePath)
