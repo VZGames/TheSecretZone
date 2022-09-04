@@ -1,11 +1,11 @@
 #ifndef __MAPPARSER_H__
 #define __MAPPARSER_H__
 
-#include <iostream>
-#include <time.h>
 #include <bits/stdc++.h>
 #include "tinyxml2.h"
 #include "SDL2/SDL.h"
+#include "TileImage.h"
+#include "Tileset.h"
 
 using namespace tinyxml2;
 class MapParser
@@ -17,10 +17,10 @@ private:
 
 private:
     void parseXML();
-    void parseTileset(XMLElement *p_TilesetElement);
-    void parseImage(XMLElement *p_ImageElement);
+    void parseTileset(XMLElement *p_TilesetElement, TilesetList *p_TilesetList);
+    void parseImage(XMLElement *p_ImageElement, Tileset &tileset);
     void parseLayer(XMLElement *p_LayerElement);
-    void parseData(XMLElement *p_DataElement, int p_Width, int p_Height, int p_WorkerCount = 4);
+    void parseData(XMLElement *p_DataElement, int *matrix, int p_Count, int p_WorkerCount = 4);
 
 public:
     ~MapParser();
