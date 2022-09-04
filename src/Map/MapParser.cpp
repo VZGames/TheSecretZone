@@ -20,8 +20,8 @@ void MapParser::parseXML()
     tileSize = root->IntAttribute("tilewidth");
     SDL_Log("Map Attribute \nWidth: %d, Height: %d, Tile Size: %d", width, height, tileSize);
 
-    TilesetList *tileList;
-
+    TilesetList tileList;
+    int *matrix = new int[width * height];
     for (XMLElement *e = root->FirstChildElement(); e != nullptr; e = e->NextSiblingElement())
     {
         if (e->Value() == std::string("tileset"))
@@ -31,12 +31,13 @@ void MapParser::parseXML()
 
         if (e->Value() == std::string("layer"))
         {
-            parseLayer(e);
+            parseLayer(e, matrix);
+            MapLayer layer(matrix, tileList);
         }
     }
 }
 
-void MapParser::parseTileset(XMLElement *p_TilesetElement, TilesetList *p_TilesetList)
+void MapParser::parseTileset(XMLElement *p_TilesetElement, TilesetList &p_TilesetList)
 {
     // <tileset firstgid="1" name="Water" tilewidth="16" tileheight="16" tilecount="4" columns="4">
     Tileset tileset;
@@ -50,7 +51,7 @@ void MapParser::parseTileset(XMLElement *p_TilesetElement, TilesetList *p_Tilese
     tileset.setLastID(tileset.getFirstID() + tileset.getCount() - 1);
     parseImage(p_TilesetElement->FirstChildElement("image"), tileset);
 
-    p_TilesetList->push_back(tileset);
+    p_TilesetList.push_back(tileset);
 }
 
 void MapParser::parseImage(XMLElement *p_ImageElement, Tileset &tileset)
@@ -68,7 +69,7 @@ void MapParser::parseImage(XMLElement *p_ImageElement, Tileset &tileset)
     tileset.setImage(&image);
 }
 
-void MapParser::parseLayer(XMLElement *p_LayerElement)
+void MapParser::parseLayer(XMLElement *p_LayerElement, int *p_Matrix)
 {
     // <layer id="4" name="grass" width="250" height="150">
     int width, height;
@@ -78,19 +79,18 @@ void MapParser::parseLayer(XMLElement *p_LayerElement)
     height = p_LayerElement->IntAttribute("height");
 
     int count = width * height;
-    int *matrix = new int[count];
 
-    parseData(p_LayerElement->FirstChildElement("data"), matrix, count);
+    parseData(p_LayerElement->FirstChildElement("data"), p_Matrix, count);
 
-    SDL_Log("Layer Attribute \nSource: %s, Width: %d, Height: %d", name, width, height);
+    // SDL_Log("Layer Attribute \nSource: %s, Width: %d, Height: %d", name, width, height);
 
-    /*  for (int i = 0; i < height; i++)
-     {
-         for (int j = 0; j < width; j++)
-         {
-             SDL_Log("matrix[%d][%d]: %d", i, j, *(matrix + (i * width) + j)); // 1 unit <=> i * p_Width
-         }
-     } */
+    /*    for (int i = 0; i < height; i++)
+       {
+           for (int j = 0; j < width; j++)
+           {
+               SDL_Log("matrix[%d][%d]: %d", i, j, *(p_Matrix + (i * width) + j)); // 1 unit <=> i * p_Width
+           }
+       } */
 }
 
 void MapParser::parseData(XMLElement *p_DataElement, int *matrix, int p_Count, int p_WorkerCount)

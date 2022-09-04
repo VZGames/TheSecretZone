@@ -4,6 +4,7 @@
 #include <bits/stdc++.h>
 #include "tinyxml2.h"
 #include "SDL2/SDL.h"
+#include "MapLayer.h"
 #include "TileImage.h"
 #include "Tileset.h"
 
@@ -17,9 +18,9 @@ private:
 
 private:
     void parseXML();
-    void parseTileset(XMLElement *p_TilesetElement, TilesetList *p_TilesetList);
-    void parseImage(XMLElement *p_ImageElement, Tileset &tileset);
-    void parseLayer(XMLElement *p_LayerElement);
+    void parseTileset(XMLElement *p_TilesetElement, TilesetList &p_TilesetList);
+    void parseImage(XMLElement *p_ImageElement, Tileset &p_Tileset);
+    void parseLayer(XMLElement *p_LayerElement, int *p_Matrix);
     void parseData(XMLElement *p_DataElement, int *matrix, int p_Count, int p_WorkerCount = 4);
 
 public:
