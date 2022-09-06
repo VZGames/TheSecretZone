@@ -67,7 +67,8 @@ bool Engine::Init(const char *p_Title, int p_Width, int p_Height)
         return 0;
     }
 
-    const std::vector<const char *> mapUrls = {"assets/maps/phu_hoa.tmx"};
+    m_CurrentGameMap = MapParser::GetInstance()->GetMap("PhuHoa");
+
     std::map<const char *, const char *> players;
     players["Player 1"] = "assets/sprites/Characters/BunnyCharacterSpriteSheet.png";
     players["Player 2"] = "assets/sprites/Characters/BunnyCharacterSpriteSheet.png";

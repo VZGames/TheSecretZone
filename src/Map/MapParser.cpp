@@ -20,7 +20,8 @@ void MapParser::parseXML()
     tileSize = root->IntAttribute("tilewidth");
     SDL_Log("Map Attribute \nWidth: %d, Height: %d, Tile Size: %d", width, height, tileSize);
 
-    TilesetList tileList;
+    TilesetList tileList;             // store tileset in vector
+    GameMap *gameMap = new GameMap(); // dynamic allocated
     int *matrix = new int[width * height];
     for (XMLElement *e = root->FirstChildElement(); e != nullptr; e = e->NextSiblingElement())
     {
@@ -33,8 +34,11 @@ void MapParser::parseXML()
         {
             parseLayer(e, matrix);
             MapLayer layer(matrix, tileList);
+            gameMap->InsertMapLayer(layer);
         }
     }
+
+    m_GameMapDict["PhuHoa"] = gameMap;
 }
 
 void MapParser::parseTileset(XMLElement *p_TilesetElement, TilesetList &p_TilesetList)
@@ -146,4 +150,9 @@ bool MapParser::loadXML(const char *p_filePath)
         return 1;
     }
     return 0;
+}
+
+GameMap *MapParser::GetMap(const char *p_MapID)
+{
+    return m_GameMapDict[p_MapID];
 }

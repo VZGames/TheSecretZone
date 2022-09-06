@@ -17,12 +17,14 @@
 
 #include "../Objects/Player/Player.h"
 #include "../Map/MapParser.h"
+#include "../Map/GameMap.h"
 
 class Player;
 
 class Engine
 {
 private:
+    GameMap *m_CurrentGameMap;
     int m_PlayerCount, m_MapUrlCount;
     SDL_Window *m_Window;
     static Engine *s_Instance;

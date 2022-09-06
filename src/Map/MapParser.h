@@ -4,6 +4,7 @@
 #include <bits/stdc++.h>
 #include "tinyxml2.h"
 #include "SDL2/SDL.h"
+#include "GameMap.h"
 #include "MapLayer.h"
 #include "TileImage.h"
 #include "Tileset.h"
@@ -13,8 +14,9 @@ class MapParser
 {
 private:
     MapParser();
-    static MapParser *s_Instance;
+    std::map<const char *, GameMap *> m_GameMapDict;
     XMLDocument *m_Doc;
+    static MapParser *s_Instance;
 
 private:
     void parseXML();
@@ -28,6 +30,7 @@ public:
     static MapParser *GetInstance() { return s_Instance = (s_Instance == nullptr) ? new MapParser() : s_Instance; }
     bool loadXML(const char *p_filePath);
 
+    GameMap *GetMap(const char *p_MapID);
     // operator
 };
 
