@@ -20,9 +20,9 @@ void MapParser::parseXML()
     tileSize = root->IntAttribute("tilewidth");
     SDL_Log("Map Attribute \nWidth: %d, Height: %d, Tile Size: %d", width, height, tileSize);
 
-    TilesetList tileList;             // store tileset in vector
-    GameMap *gameMap = new GameMap(); // dynamic allocated
-    int *matrix = new int[width * height];
+    TilesetList tileList;                  // store tileset in vector
+    GameMap *gameMap = new GameMap();      // dynamic allocated
+    int *matrix = new int[width * height]; // id matrix
     for (XMLElement *e = root->FirstChildElement(); e != nullptr; e = e->NextSiblingElement())
     {
         if (e->Value() == std::string("tileset"))

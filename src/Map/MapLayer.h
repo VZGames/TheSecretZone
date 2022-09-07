@@ -1,8 +1,9 @@
 #ifndef __MAPLAYER_H__
 #define __MAPLAYER_H__
 
+#include "SDL2/SDL.h"
 #include "Tileset.h"
-
+#include "../Graphics/TextureManager/TextureManager.h"
 class MapLayer
 {
 private:
