@@ -1,10 +1,12 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include <iostream>
 #include "Engine/Engine.h"
 
 int main(int argc, char *argv[])
 {
     std::cout << "Hello Dev\n";
-    if (Engine::GetInstance()->Init("The Secret Zone"))
+    if (Engine::GetInstance()->Init("The Secret Zone By BE-Studio"))
     {
         Engine::GetInstance()->Loop();
         Engine::GetInstance()->Clean();
@@ -12,9 +14,9 @@ int main(int argc, char *argv[])
     }
     else
     {
-        SDL_Log("Can't initialize Game Engine");
-        return 1;
+        std::cout << "Can't initialize Game Engine\n";
+        return EXIT_FAILURE;
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }

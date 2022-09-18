@@ -73,12 +73,12 @@ void Tileset::setColumns(int p_Columns)
     m_Columns = p_Columns;
 }
 
-TileImage *Tileset::getImage() const
+TileImage Tileset::getImage() const
 {
     return m_Image;
 }
 
-void Tileset::setImage(TileImage *p_Image)
+void Tileset::setImage(TileImage &p_Image)
 {
     m_Image = p_Image;
 }

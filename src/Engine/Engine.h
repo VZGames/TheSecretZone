@@ -6,20 +6,15 @@
 #include <stdio.h>
 #include <vector>
 #include <map>
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_net.h"
-#include "SDL2/SDL_image.h"
-#include "SDL2/SDL_ttf.h"
-#include "SDL2/SDL_mixer.h"
-#include "../Graphics/TextureManager/TextureManager.h"
-#include "../Input/Input.h"
-#include "../Timer/Timer.h"
-
-#include "../Objects/Player/Player.h"
-#include "../Map/MapParser.h"
-#include "../Map/GameMap.h"
+#include <stdio.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_net.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 
 class Player;
+class GameMap;
 
 class Engine
 {

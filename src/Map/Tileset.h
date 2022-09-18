@@ -12,7 +12,7 @@ private:
     int m_Width, m_Height;
     int m_Count;
     int m_Columns;
-    TileImage *m_Image;
+    TileImage m_Image;
 
 public:
     Tileset();
@@ -40,8 +40,8 @@ public:
     int getColumns() const;
     void setColumns(int p_Columns);
 
-    TileImage *getImage() const;
-    void setImage(TileImage *p_Image);
+    TileImage getImage() const;
+    void setImage(TileImage &p_Image);
 };
 
 using TilesetList = std::vector<Tileset>;

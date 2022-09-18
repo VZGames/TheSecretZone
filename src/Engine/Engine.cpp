@@ -1,4 +1,10 @@
 #include "Engine.h"
+#include "../Graphics/TextureManager/TextureManager.h"
+#include "../Input/Input.h"
+#include "../Timer/Timer.h"
+#include "../Map/MapParser.h"
+#include "../Objects/Player/Player.h"
+#include "../Map/GameMap.h"
 
 SDL_Renderer *Engine::s_Renderer = nullptr;
 Engine *Engine::s_Instance = nullptr;
@@ -18,22 +24,22 @@ bool Engine::Init(const char *p_Title, int p_Width, int p_Height)
 {
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
-        SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
+        printf("Unable to initialize SDL: %s\n", SDL_GetError());
         return 0;
     }
     if (SDLNet_Init() != 0)
     {
-        SDL_Log("Unable to initialize SDL Net: %s", SDL_GetError());
+        printf("Unable to initialize SDL Net: %s\n", SDL_GetError());
         return 0;
     }
     if (!(IMG_Init(IMG_INIT_PNG)))
     {
-        SDL_Log("Unable to initialize SDL Image: %s", SDL_GetError());
+        printf("Unable to initialize SDL Image: %s\n", SDL_GetError());
         return 0;
     }
     if (TTF_Init() != 0)
     {
-        SDL_Log("Unable to initialize SDL Font: %s", SDL_GetError());
+        printf("Unable to initialize SDL Font: %s\n", SDL_GetError());
         return 0;
     }
 
@@ -50,7 +56,7 @@ bool Engine::Init(const char *p_Title, int p_Width, int p_Height)
     if (m_Window == NULL)
     {
         // In the case that the window could not be made...
-        SDL_Log("Could not create window: %s\n", SDL_GetError());
+        printf("Could not create window: %s\n\n", SDL_GetError());
     }
 
     s_Renderer = SDL_CreateRenderer(m_Window, -1, SDL_RENDERER_ACCELERATED);
@@ -58,27 +64,30 @@ bool Engine::Init(const char *p_Title, int p_Width, int p_Height)
     if (s_Renderer)
     {
         // Select the color for drawing.
-        SDL_SetRenderDrawColor(s_Renderer, 255, 255, 255, 255);
+        SDL_SetRenderDrawColor(s_Renderer, 0, 0, 0, 255);
     }
 
-    if (!MapParser::GetInstance()->loadXML("assets/maps/test.tmx"))
+    if (!MapParser::GetInstance()->LoadXML("assets/maps/test.tmx"))
     {
-        SDL_Log("Failed to load map");
+        printf("Failed to load map");
+        return 0;
+    }
+    m_CurrentGameMap = MapParser::GetInstance()->GetMap("PhuHoa");
+    if(m_CurrentGameMap == nullptr)
+    {
+        printf("Game Map is Null\n");
         return 0;
     }
 
-    m_CurrentGameMap = MapParser::GetInstance()->GetMap("PhuHoa");
-
     std::map<const char *, const char *> players;
-    players["Player 1"] = "assets/sprites/Characters/BunnyCharacterSpriteSheet.png";
-    players["Player 2"] = "assets/sprites/Characters/BunnyCharacterSpriteSheet.png";
+    players["Player1"] = "assets/sprites/Characters/BunnyCharacterSpriteSheet.png";
+    players["Player2"] = "assets/sprites/Characters/BunnyCharacterSpriteSheet.png";
 
     std::map<const char *, const char *>::iterator playerItr;
     int playerIndex = 0;
     for (playerItr = players.begin(); playerItr != players.end(); playerItr++)
     {
-        TextureManager::GetInstance()
-            ->LoadTexture(playerItr->first, playerItr->second);
+        TextureManager::GetInstance()->LoadTexture(playerItr->first, playerItr->second);
         Player *player = new Player(new Properties(playerItr->first, Vector2I(100 + (playerIndex * 50), 100), 48, 48));
         m_PLayers[playerIndex] = *player;
         playerIndex++;
@@ -112,17 +121,10 @@ void Engine::Loop()
     }
 }
 
-void Engine::Clean()
-{
-    TextureManager::GetInstance()->Clean();
-    // Close and destroy the window and the renderer
-    SDL_DestroyWindow(m_Window);
-    SDL_DestroyRenderer(s_Renderer);
-}
-
 void Engine::Render()
 {
     SDL_RenderClear(s_Renderer);
+    m_CurrentGameMap->Render();
     for (int i = 0; i < m_PlayerCount; i++)
     {
         m_PLayers[i].Render();
@@ -134,6 +136,7 @@ void Engine::Render()
 void Engine::Update()
 {
     float dt = Timer::GetInstance()->GetDeltaTime();
+    m_CurrentGameMap->Update();
     for (int i = 0; i < m_PlayerCount; i++)
     {
         m_PLayers[i].Update(dt);
@@ -147,13 +150,31 @@ void Engine::HandleEvents()
 
 Engine::~Engine()
 {
+    delete m_MapUrls;
+    m_MapUrls = nullptr;
+
     delete m_PLayers;
-    m_PLayers = NULL;
+    m_PLayers = nullptr;
+
+    delete m_CurrentGameMap;
+    m_CurrentGameMap = nullptr;
+}
+
+
+void Engine::Clean()
+{
+    printf("Engine::Clean\n");
+    TextureManager::GetInstance()->Clean();
+    MapParser::GetInstance()->Clean();
+    // Close and destroy the window and the renderer
+    SDL_DestroyWindow(m_Window);
+    SDL_DestroyRenderer(s_Renderer);
 }
 
 void Engine::Quit()
 {
-    // Clean up
+    printf("Engine::Quit\n");
+
     SDL_Quit();
     TTF_Quit();
     IMG_Quit();

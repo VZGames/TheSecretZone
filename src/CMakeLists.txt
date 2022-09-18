@@ -39,7 +39,7 @@ link_directories(${LIBRARY_DIR})
 # load user source and header files
 file(GLOB_RECURSE SOURCE_FILES "*.h" "*.cpp")
 
-add_executable(${PROJECT_NAME} WIN32 ${SOURCE_FILES})
+add_executable(${PROJECT_NAME} main.cpp ${SOURCE_FILES})
 
 # make assets directory in build
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/assets)

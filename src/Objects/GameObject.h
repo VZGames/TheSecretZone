@@ -2,7 +2,7 @@
 #define __GAME_OBJECT_H__
 
 #include <iostream>
-#include "SDL2/SDL.h"
+#include <SDL2/SDL.h>
 #include "../Physics/Transform.h"
 #include "../Physics/vector2D.h"
 struct Properties

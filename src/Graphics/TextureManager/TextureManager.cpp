@@ -7,7 +7,7 @@ TextureManager::TextureManager()
 
 void TextureManager::LoadTexture(const char *p_TextureID, const char *p_FilePath)
 {
-    SDL_Log(p_FilePath);
+    printf("TextureID: %s, Texture Path: %s \n", p_TextureID, p_FilePath);
     SDL_Surface *surface = IMG_Load(p_FilePath);
     SDL_Texture *tex = SDL_CreateTextureFromSurface(Engine::s_Renderer, surface);
 
@@ -82,5 +82,5 @@ void TextureManager::Clean()
         SDL_DestroyTexture(i.second);
     }
     m_TextureDict.clear();
-    SDL_Log("Texture cleaned");
+    printf("Texture cleaned\n");
 }

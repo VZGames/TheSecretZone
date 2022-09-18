@@ -12,7 +12,7 @@ void GameMap::Render()
 {
     for (auto &layer : m_MapLayers)
     {
-        layer.Render();
+        layer->Render();
     }
 }
 
@@ -20,11 +20,16 @@ void GameMap::Update()
 {
     for (auto &layer : m_MapLayers)
     {
-        layer.Update();
+        layer->Update();
     }
 }
 
-void GameMap::InsertMapLayer(const MapLayer &p_MapLayer)
+int GameMap::MapLayerCount()
+{
+    return m_MapLayers.size();
+}
+
+void GameMap::InsertMapLayer(Layer *p_MapLayer)
 {
     m_MapLayers.push_back(p_MapLayer);
 }

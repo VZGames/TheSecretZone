@@ -2,12 +2,12 @@
 #define __GAMEMAP_H__
 
 #include <vector>
-#include "MapLayer.h"
+#include "Layer.h"
 
 class GameMap
 {
 private:
-    std::vector<MapLayer> m_MapLayers;
+    std::vector<Layer*> m_MapLayers;
 
 public:
     GameMap();
@@ -16,7 +16,8 @@ public:
     void Render();
     void Update();
 
-    void InsertMapLayer(const MapLayer &p_MapLayer);
+    int MapLayerCount();
+    void InsertMapLayer(Layer *p_MapLayer);
 };
 
 #endif // __GAMEMAP_H__

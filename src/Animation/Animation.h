@@ -1,8 +1,7 @@
 #ifndef __ANIMATION_H__
 #define __ANIMATION_H__
 
-#include "SDL2/SDL.h"
-#include "../Graphics/TextureManager/TextureManager.h"
+#include <SDL2/SDL.h>
 #include "../Physics/vector2D.h"
 
 class Animation

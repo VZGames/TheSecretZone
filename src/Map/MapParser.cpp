@@ -1,4 +1,8 @@
 #include "MapParser.h"
+#include "MapLayer.h"
+#include "TileImage.h"
+#include "Layer.h"
+
 MapParser::MapParser()
     : m_Doc(new XMLDocument())
 {
@@ -7,22 +11,23 @@ MapParser::MapParser()
 MapParser::~MapParser()
 {
     delete m_Doc;
-    m_Doc = NULL;
+    m_Doc = nullptr;
 }
 
 void MapParser::parseXML()
 {
+    printf("MapParser::parseXML Begin\n");
     //<map version="1.8" tiledversion="1.8.5" orientation="orthogonal" renderorder="right-down" width="250" height="150" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="1">
     XMLElement *root = m_Doc->RootElement();
     int width, height, tileSize;
     width = root->IntAttribute("width");
     height = root->IntAttribute("height");
     tileSize = root->IntAttribute("tilewidth");
-    SDL_Log("Map Attribute \nWidth: %d, Height: %d, Tile Size: %d", width, height, tileSize);
+    printf("Map Attribute Width: %d, Height: %d, Tile Size: %d\n", width, height, tileSize);
 
     TilesetList tileList;                  // store tileset in vector
     GameMap *gameMap = new GameMap();      // dynamic allocated
-    int *matrix = new int[width * height]; // id matrix
+
     for (XMLElement *e = root->FirstChildElement(); e != nullptr; e = e->NextSiblingElement())
     {
         if (e->Value() == std::string("tileset"))
@@ -30,15 +35,20 @@ void MapParser::parseXML()
             parseTileset(e, tileList);
         }
 
-        if (e->Value() == std::string("layer"))
+        else if (e->Value() == std::string("layer"))
         {
+            int mtrxSize = width * height; // init matrix size
+            int *matrix = new int[mtrxSize]; // tileset ID matrix
             parseLayer(e, matrix);
-            MapLayer layer(matrix, tileList);
+            Layer *layer =  new MapLayer(matrix, tileList);
+            m_MatrixPtrs.push_back(matrix);
+            m_LayerPtrs.push_back(layer);
             gameMap->InsertMapLayer(layer);
         }
     }
-
     m_GameMapDict["PhuHoa"] = gameMap;
+    printf("MapParser::parseXML GameMap Layer count: %d\n",m_GameMapDict["PhuHoa"]->MapLayerCount());
+    printf("MapParser::parseXML exit\n");
 }
 
 void MapParser::parseTileset(XMLElement *p_TilesetElement, TilesetList &p_TilesetList)
@@ -54,7 +64,11 @@ void MapParser::parseTileset(XMLElement *p_TilesetElement, TilesetList &p_Tilese
     tileset.setFirstID(p_TilesetElement->IntAttribute("firstgid"));
     tileset.setLastID(tileset.getFirstID() + tileset.getCount() - 1);
     parseImage(p_TilesetElement->FirstChildElement("image"), tileset);
-
+    printf("Tileset Attribute Name: %s, First ID: %d, Last ID: %d, Image: %s\n",
+           tileset.getName(),
+           tileset.getFirstID(),
+           tileset.getLastID(),
+           tileset.getImage().getSource());
     p_TilesetList.push_back(tileset);
 }
 
@@ -62,15 +76,16 @@ void MapParser::parseImage(XMLElement *p_ImageElement, Tileset &tileset)
 {
     // <image source="../sprites/Tilesets/Water.png" width="64" height="16"/>
     TileImage image;
-    int width, height;
-    const char *source;
     image.setSource(p_ImageElement->Attribute("source"));
     image.setWidth(p_ImageElement->IntAttribute("width"));
     image.setHeight(p_ImageElement->IntAttribute("height"));
 
-    // SDL_Log("Image Attribute \nSource: %s, Width: %d, Height: %d", source, width, height);
 
-    tileset.setImage(&image);
+    tileset.setImage(image);
+    printf("Image Attribute Source: %s, Width: %d, Height: %d\n",
+           tileset.getImage().getSource(),
+           tileset.getImage().getWidth(),
+           tileset.getImage().getHeight());
 }
 
 void MapParser::parseLayer(XMLElement *p_LayerElement, int *p_Matrix)
@@ -86,15 +101,7 @@ void MapParser::parseLayer(XMLElement *p_LayerElement, int *p_Matrix)
 
     parseData(p_LayerElement->FirstChildElement("data"), p_Matrix, count);
 
-    // SDL_Log("Layer Attribute \nSource: %s, Width: %d, Height: %d", name, width, height);
-
-    /*    for (int i = 0; i < height; i++)
-       {
-           for (int j = 0; j < width; j++)
-           {
-               SDL_Log("matrix[%d][%d]: %d", i, j, *(p_Matrix + (i * width) + j)); // 1 unit <=> i * p_Width
-           }
-       } */
+    printf("Layer Attribute Source: %s, Width: %d, Height: %d\n", name, width, height);
 }
 
 void MapParser::parseData(XMLElement *p_DataElement, int *matrix, int p_Count, int p_WorkerCount)
@@ -104,16 +111,37 @@ void MapParser::parseData(XMLElement *p_DataElement, int *matrix, int p_Count, i
 
     std::string id;
     std::istringstream iss(p_DataElement->GetText());
+
     for (int i = 0; i < p_Count; i++)
     {
         getline(iss, id, ',');
         std::stringstream convertor(id);
-        convertor >> *(matrix + i); // matrix[i]; (matrix <=> address 0th element of 1-D array )
+        convertor >> *(matrix + i); /// matrix[i]; (matrix <=> address 0th element of 1-D array )
     }
 
-    /// examples
+    // examples
 
-    /* int arr[p_Height][p_Width]; // arr <=> (*)[p_Width]
+    /*
+     * 1
+    for (int i = 0; i < p_Count; i++)
+    {
+        getline(iss, id, ',');
+        std::stringstream convertor(id);
+        convertor >> *(matrix + i); /// matrix[i]; (matrix <=> address 0th element of 1-D array )
+    }
+
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            printf("[%d][%d]: %d,", i, j, *(p_Matrix + (i * width) + j)); // 1 row unit <=> i * p_Width
+        }
+        printf("\n");
+    }
+
+
+    *2
+    int arr[p_Height][p_Width]; // arr <=> (*)[p_Width]
     int(*matrix)[p_Width] = arr;
 
     for (int i = 0; i < p_Height; i++)
@@ -132,16 +160,16 @@ void MapParser::parseData(XMLElement *p_DataElement, int *matrix, int p_Count, i
     {
         for (int j = 0; j < p_Width; j++)
         {
-            SDL_Log("matrix[%d][%d]: %d", i, j, matrix[i][j]);
+            printf("matrix[%d][%d]: %d", i, j, matrix[i][j]);
         }
     } */
 
     t = clock() - t;
 
-    SDL_Log("It took time %f", (float)t / CLOCKS_PER_SEC);
+    printf("It took time %f\n", ((float)t / CLOCKS_PER_SEC));
 }
 
-bool MapParser::loadXML(const char *p_filePath)
+bool MapParser::LoadXML(const char *p_filePath)
 {
     XMLError error = m_Doc->LoadFile(p_filePath);
     if (error == XML_SUCCESS)
@@ -152,7 +180,27 @@ bool MapParser::loadXML(const char *p_filePath)
     return 0;
 }
 
+
 GameMap *MapParser::GetMap(const char *p_MapID)
 {
+    printf("MapParser::GetMap %s\n", p_MapID);
     return m_GameMapDict[p_MapID];
+}
+
+void MapParser::Clean()
+{
+    for (int* ptr: m_MatrixPtrs) {
+        delete []ptr;
+        ptr = nullptr;
+    }
+    for (Layer* ptr: m_LayerPtrs) {
+        delete ptr;
+        ptr = nullptr;
+    }
+    std::map<const char *, GameMap *>::iterator it;
+    for (it = m_GameMapDict.begin(); it != m_GameMapDict.end(); ++it) {
+        delete it->second;
+        it->second = nullptr;
+    }
+    m_GameMapDict.clear();
 }

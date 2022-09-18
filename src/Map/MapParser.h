@@ -2,20 +2,25 @@
 #define __MAPPARSER_H__
 
 #include <bits/stdc++.h>
+#include <stdio.h>
+#include <vector>
+#include <SDL2/SDL.h>
 #include "tinyxml2.h"
-#include "SDL2/SDL.h"
 #include "GameMap.h"
-#include "MapLayer.h"
-#include "TileImage.h"
 #include "Tileset.h"
 
 using namespace tinyxml2;
+class GameMap;
 class MapParser
 {
+
 private:
     MapParser();
-    std::map<const char *, GameMap *> m_GameMapDict;
+private:
     XMLDocument *m_Doc;
+    std::map<const char *, GameMap *> m_GameMapDict;
+    std::vector<int*> m_MatrixPtrs;
+    std::vector<Layer*> m_LayerPtrs;
     static MapParser *s_Instance;
 
 private:
@@ -27,11 +32,11 @@ private:
 
 public:
     ~MapParser();
-    static MapParser *GetInstance() { return s_Instance = (s_Instance == nullptr) ? new MapParser() : s_Instance; }
-    bool loadXML(const char *p_filePath);
 
+    bool LoadXML(const char *p_filePath);
+    void Clean();
     GameMap *GetMap(const char *p_MapID);
-    // operator
+    static MapParser *GetInstance() { return s_Instance = (s_Instance == nullptr) ? new MapParser() : s_Instance; }
 };
 
 #endif // __MAPPARSER_H__

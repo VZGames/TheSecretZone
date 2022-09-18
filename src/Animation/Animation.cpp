@@ -1,4 +1,7 @@
 #include "Animation.h"
+#include "../Graphics/TextureManager/TextureManager.h"
+
+
 Animation::Animation()
 {
 }
