@@ -1,10 +1,12 @@
 #ifndef __ENGINE_H__
 #define __ENGINE_H__
-#define WINDOW_WIDTH 960
-#define WINDOW_HEIGHT 640
+#define WIN_WIDTH 960
+#define WIN_HEIGHT 640
 
 #include <stdio.h>
 #include <vector>
+#include <thread>
+#include <time.h>
 #include <map>
 #include <stdio.h>
 #include <SDL2/SDL.h>
@@ -34,7 +36,7 @@ private:
 
 public:
     ~Engine();
-    bool Init(const char *p_Title, int p_Width = WINDOW_WIDTH, int p_Height = WINDOW_HEIGHT);
+    bool Init(const char *p_Title, int p_Width = WIN_WIDTH, int p_Height = WIN_HEIGHT);
     void Loop();
     void Clean();
     void Quit();

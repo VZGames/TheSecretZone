@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.8" tiledversion="1.8.5" orientation="orthogonal" renderorder="right-down" width="250" height="150" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="1">
  <tileset firstgid="1" name="Water" tilewidth="16" tileheight="16" tilecount="4" columns="4">
-  <image source="../sprites/Tilesets/Water.png" width="64" height="16"/>
+  <image source="sprites/Tilesets/Water.png" width="64" height="16"/>
  </tileset>
  <tileset firstgid="5" name="Grass" tilewidth="16" tileheight="16" tilecount="80" columns="10">
-  <image source="../sprites/Tilesets/Grass.png" width="160" height="128"/>
+  <image source="sprites/Tilesets/Grass.png" width="160" height="128"/>
  </tileset>
  <layer id="1" name="water" width="250" height="150" locked="1">
   <data encoding="csv">

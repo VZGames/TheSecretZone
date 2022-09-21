@@ -20,7 +20,6 @@ private:
     XMLDocument *m_Doc;
     std::map<const char *, GameMap *> m_GameMapDict;
     std::vector<int*> m_MatrixPtrs;
-    std::vector<Layer*> m_LayerPtrs;
     static MapParser *s_Instance;
 
 private:
@@ -31,8 +30,6 @@ private:
     void parseData(XMLElement *p_DataElement, int *matrix, int p_Count, int p_WorkerCount = 4);
 
 public:
-    ~MapParser();
-
     bool LoadXML(const char *p_filePath);
     void Clean();
     GameMap *GetMap(const char *p_MapID);

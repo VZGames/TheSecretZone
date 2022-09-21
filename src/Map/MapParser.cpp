@@ -3,15 +3,11 @@
 #include "TileImage.h"
 #include "Layer.h"
 
+MapParser *MapParser::s_Instance = nullptr;
+
 MapParser::MapParser()
     : m_Doc(new XMLDocument())
 {
-}
-
-MapParser::~MapParser()
-{
-    delete m_Doc;
-    m_Doc = nullptr;
 }
 
 void MapParser::parseXML()
@@ -19,11 +15,11 @@ void MapParser::parseXML()
     printf("MapParser::parseXML Begin\n");
     //<map version="1.8" tiledversion="1.8.5" orientation="orthogonal" renderorder="right-down" width="250" height="150" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="1">
     XMLElement *root = m_Doc->RootElement();
-    int width, height, tileSize;
-    width = root->IntAttribute("width");
-    height = root->IntAttribute("height");
+    int rowCount, colCount, tileSize;
+    colCount = root->IntAttribute("width");
+    rowCount = root->IntAttribute("height");
     tileSize = root->IntAttribute("tilewidth");
-    printf("Map Attribute Width: %d, Height: %d, Tile Size: %d\n", width, height, tileSize);
+    printf("Map Attribute Width: %d, Height: %d, Tile Size: %d\n", colCount, rowCount, tileSize);
 
     TilesetList tileList;                  // store tileset in vector
     GameMap *gameMap = new GameMap();      // dynamic allocated
@@ -37,17 +33,15 @@ void MapParser::parseXML()
 
         else if (e->Value() == std::string("layer"))
         {
-            int mtrxSize = width * height; // init matrix size
+            int mtrxSize = colCount * rowCount; // init matrix size
             int *matrix = new int[mtrxSize]; // tileset ID matrix
             parseLayer(e, matrix);
-            Layer *layer =  new MapLayer(matrix, tileList);
+            Layer *layer =  new MapLayer(matrix, tileList, colCount, rowCount);
             m_MatrixPtrs.push_back(matrix);
-            m_LayerPtrs.push_back(layer);
             gameMap->InsertMapLayer(layer);
         }
     }
     m_GameMapDict["PhuHoa"] = gameMap;
-    printf("MapParser::parseXML GameMap Layer count: %d\n",m_GameMapDict["PhuHoa"]->MapLayerCount());
     printf("MapParser::parseXML exit\n");
 }
 
@@ -63,6 +57,7 @@ void MapParser::parseTileset(XMLElement *p_TilesetElement, TilesetList &p_Tilese
     tileset.setColumns(p_TilesetElement->IntAttribute("columns"));
     tileset.setFirstID(p_TilesetElement->IntAttribute("firstgid"));
     tileset.setLastID(tileset.getFirstID() + tileset.getCount() - 1);
+
     parseImage(p_TilesetElement->FirstChildElement("image"), tileset);
     printf("Tileset Attribute Name: %s, First ID: %d, Last ID: %d, Image: %s\n",
            tileset.getName(),
@@ -183,24 +178,26 @@ bool MapParser::LoadXML(const char *p_filePath)
 
 GameMap *MapParser::GetMap(const char *p_MapID)
 {
-    printf("MapParser::GetMap %s\n", p_MapID);
-    return m_GameMapDict[p_MapID];
+    printf("MapParser::GetMap ID: %s\n", p_MapID);
+    GameMap *gameMap = m_GameMapDict["PhuHoa"];
+    return gameMap;
 }
 
 void MapParser::Clean()
 {
+    printf("MapParser::Clean");
+
+    delete m_Doc;
+    m_Doc = NULL;
+
     for (int* ptr: m_MatrixPtrs) {
         delete []ptr;
-        ptr = nullptr;
-    }
-    for (Layer* ptr: m_LayerPtrs) {
-        delete ptr;
         ptr = nullptr;
     }
     std::map<const char *, GameMap *>::iterator it;
     for (it = m_GameMapDict.begin(); it != m_GameMapDict.end(); ++it) {
         delete it->second;
-        it->second = nullptr;
+        it->second = NULL;
     }
     m_GameMapDict.clear();
 }

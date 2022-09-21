@@ -1,4 +1,5 @@
 #include "Tileset.h"
+
 Tileset::Tileset()
 {
 }
@@ -7,6 +8,7 @@ const char *Tileset::getName() const
 {
     return m_Name;
 }
+
 
 void Tileset::setName(const char *p_Name)
 {

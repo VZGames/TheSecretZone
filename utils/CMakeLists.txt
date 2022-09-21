@@ -10,7 +10,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
-add_subdirectory(memory)
+add_subdirectory(MyUtils)
 add_subdirectory(TinyXML2)
 add_subdirectory(TinyXML2_6_2)
 

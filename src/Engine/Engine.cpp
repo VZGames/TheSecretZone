@@ -2,14 +2,13 @@
 #include "../Graphics/TextureManager/TextureManager.h"
 #include "../Input/Input.h"
 #include "../Timer/Timer.h"
-#include "../Map/MapParser.h"
 #include "../Objects/Player/Player.h"
 #include "../Map/GameMap.h"
+#include "../Map/MapParser.h"
 
 SDL_Renderer *Engine::s_Renderer = nullptr;
 Engine *Engine::s_Instance = nullptr;
 bool Engine::s_Running = false;
-MapParser *MapParser::s_Instance = nullptr;
 
 Engine::Engine()
     : m_Window(nullptr)
@@ -51,7 +50,7 @@ bool Engine::Init(const char *p_Title, int p_Width, int p_Height)
         - flags
     */
     SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
-    m_Window = SDL_CreateWindow(p_Title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, window_flags);
+    m_Window = SDL_CreateWindow(p_Title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, p_Width, p_Height, window_flags);
     // Check that the window was successfully created
     if (m_Window == NULL)
     {
@@ -79,19 +78,19 @@ bool Engine::Init(const char *p_Title, int p_Width, int p_Height)
         return 0;
     }
 
+    printf("Current Map have %d Layers\n", m_CurrentGameMap->MapLayerCount());
+
     std::map<const char *, const char *> players;
     players["Player1"] = "assets/sprites/Characters/BunnyCharacterSpriteSheet.png";
     players["Player2"] = "assets/sprites/Characters/BunnyCharacterSpriteSheet.png";
 
     std::map<const char *, const char *>::iterator playerItr;
-    int playerIndex = 0;
     for (playerItr = players.begin(); playerItr != players.end(); playerItr++)
     {
         TextureManager::GetInstance()->LoadTexture(playerItr->first, playerItr->second);
-        Player *player = new Player(new Properties(playerItr->first, Vector2I(100 + (playerIndex * 50), 100), 48, 48));
-        m_PLayers[playerIndex] = *player;
-        playerIndex++;
     }
+    m_PLayers[0] = Player(new Properties("Player1", Vector2I(100 + (0 * 50), 100), 48, 48));
+
 
     s_Running = true;
 
@@ -125,11 +124,7 @@ void Engine::Render()
 {
     SDL_RenderClear(s_Renderer);
     m_CurrentGameMap->Render();
-    for (int i = 0; i < m_PlayerCount; i++)
-    {
-        m_PLayers[i].Render();
-    }
-
+    m_PLayers[0].Render();
     SDL_RenderPresent(s_Renderer);
 }
 
@@ -137,10 +132,7 @@ void Engine::Update()
 {
     float dt = Timer::GetInstance()->GetDeltaTime();
     m_CurrentGameMap->Update();
-    for (int i = 0; i < m_PlayerCount; i++)
-    {
-        m_PLayers[i].Update(dt);
-    }
+    m_PLayers[0].Update(dt);
 }
 
 void Engine::HandleEvents()
@@ -151,21 +143,21 @@ void Engine::HandleEvents()
 Engine::~Engine()
 {
     delete m_MapUrls;
-    m_MapUrls = nullptr;
+    m_MapUrls = NULL;
 
     delete m_PLayers;
-    m_PLayers = nullptr;
+    m_PLayers = NULL;
 
     delete m_CurrentGameMap;
-    m_CurrentGameMap = nullptr;
+    m_CurrentGameMap = NULL;
 }
 
 
 void Engine::Clean()
 {
     printf("Engine::Clean\n");
-    TextureManager::GetInstance()->Clean();
     MapParser::GetInstance()->Clean();
+    TextureManager::GetInstance()->Clean();
     // Close and destroy the window and the renderer
     SDL_DestroyWindow(m_Window);
     SDL_DestroyRenderer(s_Renderer);

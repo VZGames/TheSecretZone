@@ -13,7 +13,7 @@ struct Properties
     Vector2I m_Position;
     int m_Width, m_Height;
     Properties()
-        : m_TexTureID(""), m_Position(Vector2I(0, 0)), m_Width(0), m_Height(0), m_Flip(SDL_FLIP_NONE)
+        : m_TexTureID(""), m_Position(Vector2I()), m_Width(0), m_Height(0), m_Flip(SDL_FLIP_NONE)
     {
     }
     Properties(const char *p_TexTureID, Vector2I p_Position, int p_Width, int p_Height, SDL_RendererFlip p_Flip = SDL_FLIP_NONE)

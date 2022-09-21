@@ -6,25 +6,25 @@ template <typename T>
 class Vector2D
 {
 private:
-    inline Vector2D<T> &m_Add(const Vector2D<T> &p_Vec)
+    Vector2D<T> &m_Add(const Vector2D<T> &p_Vec)
     {
         this->m_X += p_Vec.m_X;
         this->m_Y += p_Vec.m_Y;
         return *this;
     }
-    inline Vector2D<T> &m_Subtract(const Vector2D<T> &p_Vec)
+    Vector2D<T> &m_Subtract(const Vector2D<T> &p_Vec)
     {
         this->m_X -= p_Vec.m_X;
         this->m_Y -= p_Vec.m_Y;
         return *this;
     }
-    inline Vector2D<T> &m_Multiply(const Vector2D<T> &p_Vec)
+    Vector2D<T> &m_Multiply(const Vector2D<T> &p_Vec)
     {
         this->m_X *= p_Vec.m_X;
         this->m_Y *= p_Vec.m_Y;
         return *this;
     }
-    inline Vector2D<T> &m_Divide(const Vector2D<T> &p_Vec)
+    Vector2D<T> &m_Divide(const Vector2D<T> &p_Vec)
     {
         this->m_X /= p_Vec.m_X;
         this->m_Y /= p_Vec.m_Y;
@@ -34,19 +34,23 @@ private:
 public:
     T m_X;
     T m_Y;
+    Vector2D(const Vector2D<T> &p_Copy) {
+        this->m_X = p_Copy.m_X;
+        this->m_Y = p_Copy.m_Y;
+    }
     Vector2D() : m_X(0), m_Y(0) {}
     Vector2D(T p_X, T p_Y) : m_X(p_X), m_Y(p_Y) {}
 
     Vector2D<T> &Ones()
     {
-        this->m_X = 1;
-        this->m_Y = 1;
+        this->m_X = static_cast<T>(1);
+        this->m_Y = static_cast<T>(1);
         return *this;
     }
     Vector2D<T> &Zeros()
     {
-        this->m_X = 0;
-        this->m_Y = 0;
+        this->m_X = static_cast<T>(0);
+        this->m_Y = static_cast<T>(0);
         return *this;
     }
 

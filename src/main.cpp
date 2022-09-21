@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
 #include "Engine/Engine.h"
@@ -15,8 +14,6 @@ int main(int argc, char *argv[])
     else
     {
         std::cout << "Can't initialize Game Engine\n";
-        return EXIT_FAILURE;
     }
-
-    return EXIT_SUCCESS;
+    return 0;
 }
