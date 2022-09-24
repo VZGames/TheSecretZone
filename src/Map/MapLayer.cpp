@@ -25,13 +25,30 @@ void MapLayer::Update()
 void MapLayer::Render()
 {
     //    printf("MapLayer::Render\n");
-    for (int row = 0; row < m_Row; row++) {
-        for (int col = 0; col < m_Col; col++) {
-            Tileset ts = m_TileList[0];
-            printf("FirstID: %d, LastID: %d\n", ts.getFirstID(), ts.getLastID());
-            int tileSize = ts.getWidth(); /// or ts.getHeight();
-            int tileID = ts.getFirstID();
-            TextureManager::GetInstance()->DrawTile(ts.getName(), tileSize, Vector2I(col * tileSize, row * tileSize), row, 1);
+    for (int i = 0; i < m_Row; i++)
+    {
+        for (int j = 0; j < m_Col; j++)
+        {
+            int tileID = *(m_Matrix + (i * m_Col) + j);
+//            printf("[%d][%d]: %d,", i, j, *(m_Matrix + (i * m_Col) + j))); // 1 row unit <=> i * p_Width
         }
+        printf("\n");
     }
+//    for (int row = 0; row < m_Row; row++) {
+//        for (int col = 0; col < m_Col; col++) {
+//            Tileset ts = m_TileList[0];
+//            int tileSize = ts.getWidth(); /// or ts.getHeight();
+//            int tileID = *(m_Matrix + (row * m_Col) + col);
+//            int tileRow = tileID / ts.getColumns();
+//            int tileCol = tileID - tileRow * ts.getColumns() - 1;
+
+//            if (tileID % ts.getColumns() == 0)
+//            {
+//                tileRow--;
+//                tileCol = ts.getColumns() - 1;
+//            }
+////            printf("FirstID: %d, LastID: %d, TileID: %d\n", ts.getFirstID(), ts.getLastID(), tileID);
+//            //            TextureManager::GetInstance()->DrawTile(ts.getName(), tileSize, Vector2I(col * tileSize, row * tileSize), tileRow, tileCol);
+//        }
+//    }
 }

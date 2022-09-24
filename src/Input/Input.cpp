@@ -1,20 +1,17 @@
 #include "Input.h"
+#include "../Engine/Engine.h"
 
-SDL_Event Input::s_Event;
+
 Input *Input::s_Instance = nullptr;
 
 void Input::Listen()
 {
-    while (SDL_PollEvent(&s_Event))
+    while (SDL_PollEvent(&Engine::s_Event))
     {
-        switch (s_Event.type)
+        switch (Engine::s_Event.type)
         {
         case SDL_QUIT:
             Engine::s_Running = false;
-            break;
-        case SDL_KEYDOWN:
-        case SDL_KEYUP:
-            m_KeyBoardState = SDL_GetKeyboardState(nullptr);
             break;
         default:
             break;
@@ -34,4 +31,9 @@ bool Input::GetKeyDown(SDL_Scancode p_NumKey)
 Input::Input()
 {
     m_KeyBoardState = SDL_GetKeyboardState(nullptr);
+}
+
+Input::~Input()
+{
+
 }

@@ -6,6 +6,7 @@
 #include "../Map/GameMap.h"
 #include "../Map/MapParser.h"
 
+SDL_Event Engine::s_Event;
 SDL_Renderer *Engine::s_Renderer = nullptr;
 Engine *Engine::s_Instance = nullptr;
 bool Engine::s_Running = false;
@@ -14,7 +15,7 @@ Engine::Engine()
     : m_Window(nullptr)
 {
     m_MapUrlCount = 1;
-    m_PlayerCount = 2;
+    m_PlayerCount = 1;
     m_MapUrls = new char[m_MapUrlCount];
     m_PLayers = new Player[m_PlayerCount];
 }
@@ -66,7 +67,7 @@ bool Engine::Init(const char *p_Title, int p_Width, int p_Height)
         SDL_SetRenderDrawColor(s_Renderer, 0, 0, 0, 255);
     }
 
-    if (!MapParser::GetInstance()->LoadXML("assets/maps/test.tmx"))
+    if (!MapParser::GetInstance()->LoadXML("assets/maps/phu_hoa.tmx"))
     {
         printf("Failed to load map");
         return 0;

@@ -42,6 +42,7 @@ public:
     void Quit();
     static bool s_Running;
     static SDL_Renderer *s_Renderer;
+    static SDL_Event s_Event;
     static Engine *GetInstance() { return s_Instance = (s_Instance == nullptr) ? new Engine() : s_Instance; }
 };
 #endif // __ENGINE_H__

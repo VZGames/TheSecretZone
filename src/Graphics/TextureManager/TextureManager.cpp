@@ -38,7 +38,12 @@ void TextureManager::DrawTile(const char *p_TileID, int p_TileSize, Vector2I p_P
         p_TileSize,
         p_TileSize,
     };
-    SDL_RenderCopyEx(Engine::s_Renderer, m_TextureDict[p_TileID], &srcRect, &dstRect, 0, 0, p_Flip);
+    SDL_RenderCopyEx(Engine::s_Renderer,
+                     m_TextureDict[p_TileID],
+                     &srcRect, &dstRect,
+                     0,
+                     0,
+                     p_Flip);
 }
 
 void TextureManager::DrawFrame(const char *p_TextureID, Vector2I p_Pos, int p_Width, int p_Height, int p_Row, int p_Frame, SDL_RendererFlip p_Flip, double p_Angle)
